@@ -1,0 +1,70 @@
+{
+  "general": {
+    "title": "Title",
+    "url": "URL",
+    "description": "Description",
+    "title_welcome": "Welcome",
+    "message_wait_request": "Please wait, we are processing the request...",
+    "message_text_error": "Sorry, the following error has occurred:",
+    "message_action_success":"Successful action",
+    "label_email": "Email",
+    "label_password": "Password",
+    "placeholder_email": "Enter email",
+    "placeholder_password": "Enter password",
+    "label_access":"Go to link",
+    "label_search":"Search",
+    "label_remove":"Remove",
+    "label_save":"Save",
+    "label_accept":"Accept",
+    "label_cancel":"Cancel",
+    "label_create":"Create",
+    "title_confirmation":"Confirmation",
+    "message_confirmation":"Are you sure you want to do the action?"
+  },
+  "home":{
+    "label_create_accesslink":"Create access link"
+  },
+  "login": {
+    "title_form": "Log in",
+    "label_form_action": "Log in",
+    "error_required_email": "Email is required",
+    "error_required_password": "The password is required",
+    "label_help_password": "Never share your password with anyone else.",
+    "label_forgot_password": "Forgot Password?",
+    "label_create_account": "Create an Account!"
+  },
+  "createuser": {
+    "title_form": "Create user",
+    "label_form_action": "Create",
+    "label_name": "Name",
+    "label_surname": "Surname",
+    "label_help_email": "This email will be your username.",
+    "error_required_name": "The name is required",
+    "error_required_surname": "The surname is required",
+    "label_lang": "Language",
+    "label_confirm_password": "Confirm password",
+    "error_required_confirm_pass": "Confirm password is required",
+    "error_notmatch_password": "The password does not match the one entered before",
+    "message_success_create": "User created successfully.",
+    "message_success_dologin": "You can proceed to login with",
+    "placeholder_name": "Enter name",
+    "placeholder_surname": "Enter surname",
+    "placeholder_confirm_password": "Password confirmation"
+  },
+  "recoverypass": {
+    "title_form": "Password recovery",
+    "label_form_action": "Send",
+    "label_retry_action": "Retry",
+    "label_help_first": "Enter your email address and in a few minutes",
+    "label_help_second": "you will receive the instructions to modify your password.",
+    "message_success_send_first": "The email has been sent successfully.",
+    "message_success_send_second": "Please follow the instructions indicated therein.",
+    "message_error_send": "Check if your email address is correct and try again."
+  },
+  "principal": {
+    "title": "Workdesk",
+    "label_user_data": "Profile",
+    "label_logout": "Logout"
+  }
+
+}

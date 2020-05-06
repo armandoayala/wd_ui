@@ -1,0 +1,41 @@
+<div class="col-lg-12 d-flex justify-content-center">
+
+    <div class="card border-primary text-center">
+      <div class="card-body">
+        <h5 class="card-title">{{ 'login.title_form' | translate }}</h5>
+
+        <p class="card-text text-info" *ngIf="operationResult.error==null && operationResult.inProgress">{{ 'general.message_wait_request' | translate }}</p>
+
+        <div class="card-text text-center" *ngIf="operationResult.error!==null && operationResult.error">
+            <p>{{ 'general.message_text_error' | translate }} <br> <span class="text-danger">{{operationResult.message}}</span></p>
+        </div>
+
+        <form #loginForm="ngForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <input type="email" class="form-control" name="email" #email="ngModel" [(ngModel)]="credential.email" aria-describedby="emailHelp" placeholder="{{ 'general.placeholder_email' | translate }}" required>
+            <span class="text-danger" *ngIf="!email.valid && email.touched">
+              {{ 'login.error_required_email' | translate }}
+            </span>
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control" name="password" #password="ngModel" [(ngModel)]="credential.password" placeholder="{{ 'general.placeholder_password' | translate }}" required>
+            <small id="passwordHelp" class="form-text text-muted">{{ 'login.label_help_password' | translate }}</small>
+            <span class="text-danger" *ngIf="!password.valid && password.touched">
+              {{ 'login.error_required_password' | translate }}
+            </span>
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg btn-block" [disabled]="!loginForm.form.valid">{{ 'login.label_form_action' | translate }}</button>
+        </form>
+        <hr>
+        <div class="text-center">
+            <a class="small" [routerLink]="['/recoverypass']">{{ 'login.label_forgot_password' | translate }}</a>
+        </div>
+        <div class="text-center">
+            <a class="small" [routerLink]="['/createuser']">{{ 'login.label_create_account' | translate }}</a>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>

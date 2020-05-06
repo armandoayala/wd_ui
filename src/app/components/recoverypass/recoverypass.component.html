@@ -1,0 +1,43 @@
+<div class="col-lg-12 d-flex justify-content-center">
+
+    <div class="card border-primary text-center">
+      <div class="card-body">
+        <h5 class="card-title">{{ 'recoverypass.title_form' | translate }}</h5>
+
+        <p class="card-text" *ngIf="error==null && !inProgress">{{ 'recoverypass.label_help_first' | translate }} <br> {{ 'recoverypass.label_help_second' | translate }}</p>
+
+        <p class="card-text text-info" *ngIf="error==null && inProgress">{{ 'general.message_wait_request' | translate }}</p>
+
+        <form #recoveryPassForm="ngForm" (ngSubmit)="onSubmit()" *ngIf="error==null">
+          <div class="form-group">
+            <input type="email" class="form-control" name="email" #email="ngModel" [(ngModel)]="credential.email" aria-describedby="emailHelp" placeholder="{{ 'general.placeholder_email' | translate }}" required>
+            <span class="text-danger" *ngIf="!email.valid && email.touched">
+              {{ 'login.error_required_email' | translate }}
+            </span>
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg btn-block" [disabled]="!recoveryPassForm.form.valid">{{ 'recoverypass.label_form_action' | translate }}</button>
+          <hr>
+          <button type="button" class="btn btn-link small" [routerLink]="['/login']">{{ 'login.title_form' | translate }}</button>
+        </form>
+
+        <div class="card-text" *ngIf="error!==null && !error">
+            <p>{{ 'recoverypass.message_success_send_first' | translate }} <br> {{ 'recoverypass.message_success_send_second' | translate }}</p>
+        </div>
+
+        <div class="card-text" *ngIf="error!==null && error">
+            <p>{{ 'general.message_text_error' | translate }} <br> <span class="text-danger">{{descriptionRes}}</span></p>
+            <p>{{ 'recoverypass.message_error_send' | translate }}</p>
+        </div>
+        <div class="text-center" *ngIf="error!==null">
+            <hr>
+            <button type="button" class="btn btn-link small" (click)="retry()">{{ 'recoverypass.label_retry_action' | translate }}</button>
+            <button type="button" class="btn btn-link small" [routerLink]="['/login']">{{ 'login.title_form' | translate }}</button>
+        </div>
+
+      </div>
+
+
+
+    </div>
+
+  </div>

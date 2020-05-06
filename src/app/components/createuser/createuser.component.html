@@ -1,0 +1,77 @@
+  <div class="col-md-6 col-lg-6 offset-md-3">
+
+    <div class="card border-primary">
+      <div class="card-body">
+        <h5 class="card-title text-center">{{ 'createuser.title_form' | translate }}</h5>
+
+        <p class="card-text text-info" *ngIf="operationResult.error==null && operationResult.inProgress">{{ 'general.message_wait_request' | translate }}</p>
+
+        <div class="card-text text-center" *ngIf="operationResult.error!==null && operationResult.error">
+          <p>{{ 'general.message_text_error' | translate }} <br> <span class="text-danger">{{operationResult.message}}</span></p>
+        </div>
+
+        <form #createuserForm="ngForm" (ngSubmit)="onSubmit()" *ngIf="operationResult.inProgress==false && (operationResult.error==null || operationResult.error==true)">
+          <div class="form-group">
+            <label for="name">{{ 'createuser.label_name' | translate }}</label>
+            <input type="text" class="form-control" name="name" #name="ngModel" [(ngModel)]="createUser.name" placeholder="{{ 'createuser.placeholder_name' | translate }}" required>
+            <span class="text-danger" *ngIf="!name.valid && name.touched">
+              {{ 'createuser.error_required_name' | translate }}
+            </span>
+          </div>
+          <div class="form-group">
+            <label for="name">{{ 'createuser.label_surname' | translate }}</label>
+            <input type="text" class="form-control" name="surname" #surname="ngModel" [(ngModel)]="createUser.surname" placeholder="{{ 'createuser.placeholder_surname' | translate }}" required>
+            <span class="text-danger" *ngIf="!surname.valid && surname.touched">
+              {{ 'createuser.error_required_surname' | translate }}
+            </span>
+          </div>
+          <div class="form-group">
+            <label for="email">{{ 'general.label_email' | translate }}</label>
+            <input type="email" class="form-control" name="email" #email="ngModel" [(ngModel)]="createUser.email" aria-describedby="emailHelp" placeholder="{{ 'general.placeholder_email' | translate }}" required>
+            <small id="emailHelp" class="form-text text-muted">{{ 'createuser.label_help_email' | translate }}</small>
+            <span class="text-danger" *ngIf="!email.valid && email.touched">
+              {{ 'login.error_required_email' | translate }}
+            </span>
+          </div>
+          <div class="form-group">
+              <label for="locale">{{ 'createuser.label_lang' | translate }}</label>
+          	  <select class="custom-select form-control" name="locale" #locale="ngModel" [(ngModel)]="createUser.locale" required>
+                <option *ngFor="let item of locales; let i = index" [value]="item.lang" [selected]="i==0">
+                   {{item.label}}
+                </option>
+          	  </select>
+          </div>
+          <div class="form-group">
+            <label for="password">{{ 'general.label_password' | translate }}</label>
+            <input type="password" class="form-control" name="password" #password="ngModel" [(ngModel)]="createUser.password" placeholder="{{ 'general.placeholder_password' | translate }}" required>
+            <span class="text-danger" *ngIf="!password.valid && password.touched">
+              {{ 'login.error_required_password' | translate }}
+            </span>
+          </div>
+          <div class="form-group">
+            <label for="confirmPassword">{{ 'createuser.label_confirm_password' | translate }}</label>
+            <input type="password" class="form-control" name="confirmPassword" #confirmPassword="ngModel" [(ngModel)]="createUser.confirmPassword" placeholder="{{ 'createuser.placeholder_confirm_password' | translate }}" required>
+            <span class="text-danger" *ngIf="!confirmPassword.valid && confirmPassword.touched">
+              {{ 'createuser.error_required_confirm_pass' | translate }}
+            </span>
+            <span class="text-danger" *ngIf="confirmPassword.valid && confirmPassword.touched && createUser.confirmPassword!==createUser.password">
+              {{ 'createuser.error_notmatch_password' | translate }}
+            </span>
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg btn-block" [disabled]="!createuserForm.form.valid">{{ 'createuser.label_form_action' | translate }}</button>
+        </form>
+
+        <div class="card-text text-center" *ngIf="operationResult.error!==null && !operationResult.error">
+          <p>{{ 'createuser.message_success_create' | translate }} <br> {{ 'createuser.message_success_dologin' | translate }} <strong>{{createUser.email}}</strong></p>
+        </div>
+
+        <div class="text-center">
+          <hr>
+          <button type="button" class="btn btn-link small" [routerLink]="['/login']">{{ 'login.title_form' | translate }}</button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>

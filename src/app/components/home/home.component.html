@@ -1,0 +1,59 @@
+<div class="row">
+  <div class="col-sm-12 col-md-12 col-lg-12 mb-3">
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1"><i class="fas fa-search"></i></span>
+      </div>
+      <input type="text" class="form-control" [(ngModel)]="filtersearch" placeholder="{{ 'general.label_search' | translate }}" aria-describedby="basic-addon1">
+      <div class="input-group-append">
+        <button (click)="openCreateModal(CreateAccessLinkModal)" class="btn btn-outline-secondary" type="button" title="{{ 'home.label_create_accesslink' | translate }}"><i class="fas fa-plus-circle"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-6 col-md-3 col-lg-3 mb-3" *ngFor="let item of accesslinks | searchaccesslink: filtersearch">
+
+    <div class="card" data-toggle="tooltip" data-placement="top" title="{{item.description}}">
+      <div class="card-body">
+        <h5 class="card-title">{{item.title}}</h5>
+        <!--<p class="card-text text-description">{{item.description}}</p>-->
+        <a target="_blank" href="{{item.url}}" class="btn btn-primary btn-lg btn-block btn-sm mb-1">{{ 'general.label_access' | translate }}</a>
+        <div class="text-center">
+            <button type="button" (click)="openConfirmationDialog(item._id)" class="btn btn-link small">{{ 'general.label_remove' | translate }}</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<ng-template #CreateAccessLinkModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{ 'general.label_create' | translate }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeCreateModel('CLOSE')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+   <form [ngClass]="{'was-validated': accessLinkEntity.isNotValid==true}">
+    <div class="form-group">
+      <label for="title">{{ 'general.title' | translate }}</label>
+      <input type="text" class="form-control" id="title" name="title" #title="ngModel" [(ngModel)]="accessLinkEntity.title" required>
+    </div>
+    <div class="form-group">
+      <label for="url">{{ 'general.url' | translate }}</label>
+      <input type="text" class="form-control" id="url" name="url" #url="ngModel" [(ngModel)]="accessLinkEntity.url" required>
+    </div>
+    <div class="form-group">
+      <label for="description">{{ 'general.description' | translate }}</label>
+      <textarea class="form-control" id="description" name="description" #description="ngModel" [(ngModel)]="accessLinkEntity.description" rows="5" cols="50" maxlength="50" ></textarea>
+    </div>
+   </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="closeCreateModel('CLOSE')">{{ 'general.label_cancel' | translate }}</button>
+    <button type="button" class="btn btn-outline-dark" (click)="closeCreateModel('SAVE')">{{ 'general.label_save' | translate }}</button>
+  </div>
+</ng-template>

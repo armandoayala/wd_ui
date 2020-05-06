@@ -1,0 +1,68 @@
+<div class="col-lg-12 d-flex justify-content-center">
+
+    <div class="card border-primary">
+      <div class="card-body">
+        <h5 class="card-title text-center">Change Password</h5>
+
+        <p class="card-text" *ngIf="operationResult.error==null">Introduzca los datos solicitados para proceder al cambio de password.</p>
+
+
+        <p class="card-text text-info" *ngIf="operationResult.error==null && operationResult.inProgress">Por favor aguarde, estamos procesando el cambio...</p>
+
+        <br>
+
+        <form #changepassForm="ngForm" (ngSubmit)="onSubmit()" *ngIf="operationResult.error==null">
+          <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="email" class="form-control" name="email" #email="ngModel" [(ngModel)]="passwordChange.email" aria-describedby="emailHelp" placeholder="Enter email" required>
+            <span class="text-danger" *ngIf="!email.valid && email.touched">
+              El email es obligatorio
+            </span>
+          </div>
+          <div class="form-group">
+            <label for="code">Código seguridad</label>
+            <input type="number" class="form-control" name="code" #code="ngModel" [(ngModel)]="passwordChange.code" placeholder="Enter code" required>
+            <span class="text-danger" *ngIf="!code.valid && code.touched">
+              El código es obligatorio
+            </span>
+          </div>
+          <div class="form-group">
+            <label for="password">Nuevo password</label>
+            <input type="password" class="form-control" name="password" #password="ngModel" [(ngModel)]="passwordChange.password" placeholder="Password" required>
+            <span class="text-danger" *ngIf="!password.valid && password.touched">
+              El password es obligatorio
+            </span>
+          </div>
+          <div class="form-group">
+            <label for="confirmPassword">Confirme password</label>
+            <input type="password" class="form-control" name="confirmPassword" #confirmPassword="ngModel" [(ngModel)]="passwordChange.confirmPassword" placeholder="Password confirmación" required>
+            <span class="text-danger" *ngIf="!confirmPassword.valid && confirmPassword.touched">
+              Confirmación de password es obligatorio
+            </span>
+            <span class="text-danger" *ngIf="confirmPassword.valid && confirmPassword.touched && passwordChange.confirmPassword!==passwordChange.password">
+              El password no coincide con el ingresado antes
+            </span>
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg btn-block" [disabled]="!changepassForm.form.valid">Change</button>
+        </form>
+
+        <div class="card-text text-center" *ngIf="operationResult.error!==null && !operationResult.error">
+            <p>El cambio fue realizado con éxito. <br> Por favor realice el login con su nueva password.</p>
+        </div>
+
+        <div class="card-text text-center" *ngIf="operationResult.error!==null && operationResult.error">
+            <p>Lo sentimos, ha ocurrido el siguiente error: <br> <span class="text-danger">{{operationResult.message}}</span></p>
+
+            <button type="button" class="btn btn-primary btn-lg btn-block" (click)="retry()">Retry</button>
+        </div>
+
+        <div class="text-center">
+            <hr>
+            <button type="button" class="btn btn-link small" [routerLink]="['/login']">Login</button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>

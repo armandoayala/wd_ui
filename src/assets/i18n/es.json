@@ -1,0 +1,70 @@
+{
+  "general": {
+    "title": "Título",
+    "url": "URL",
+    "description": "Descripción",
+    "title_welcome": "Bienvenido",
+    "message_wait_request": "Por favor aguarde, estamos procesando la solicitud...",
+    "message_text_error": "Lo sentimos, ha ocurrido el siguiente error:",
+    "message_action_success":"Acción exitosa",
+    "label_email": "Email",
+    "label_password": "Password",
+    "placeholder_email": "Ingrese email",
+    "placeholder_password": "Ingrese password",
+    "label_access":"Acceder",
+    "label_search":"Búsqueda",
+    "label_remove":"Eliminar",
+    "label_save":"Guardar",
+    "label_accept":"Aceptar",
+    "label_cancel":"Cancelar",
+    "label_create":"Crear",
+    "title_confirmation":"Confirmación",
+    "message_confirmation":"¿Estás seguro que desea realizar la acción?"
+  },
+  "home":{
+    "label_create_accesslink":"Crear link de acceso"
+  },
+  "login": {
+    "title_form": "Iniciar sesión",
+    "label_form_action": "Iniciar",
+    "error_required_email": "El email es obligatorio",
+    "error_required_password": "El password es obligatorio",
+    "label_help_password": "Nunca comparta su password con nadie más.",
+    "label_forgot_password": "Olvidó su password?",
+    "label_create_account": "Crear una cuenta!"
+  },
+  "createuser": {
+    "title_form": "Crear usuario",
+    "label_form_action": "Crear",
+    "label_name": "Nombre",
+    "label_surname": "Apellido",
+    "label_help_email": "Este correo será su nombre de usuario.",
+    "error_required_name": "El nombre es obligatorio",
+    "error_required_surname": "El apellido es obligatorio",
+    "label_lang": "Idioma",
+    "label_confirm_password": "Confirme password",
+    "error_required_confirm_pass": "Confirmación de password es obligatorio",
+    "error_notmatch_password": "El password no coincide con el ingresado antes",
+    "message_success_create": "Usuario creado con éxito.",
+    "message_success_dologin": "Puede proceder a realizar el login con",
+    "placeholder_name": "Ingrese nombre",
+    "placeholder_surname": "Ingrese apellido",
+    "placeholder_confirm_password": "Password confirmación"
+  },
+  "recoverypass": {
+    "title_form": "Recuperar Password",
+    "label_form_action": "Enviar",
+    "label_retry_action": "Reintentar",
+    "label_help_first": "Introduzca su dirección de correo y en poco minutos",
+    "label_help_second": "recibirá las intrucciones para modificar su password.",
+    "message_success_send_first": "Se ha enviado el correo de forma exitosa.",
+    "message_success_send_second": "Por favor siga las instrucciones indicadas en el mismo.",
+    "message_error_send": "Verifique si su dirección de correo es correcta e intente nuevamente."
+  },
+  "principal": {
+    "title": "Workdesk",
+    "label_user_data": "Mis datos",
+    "label_logout": "Salir"
+  }
+
+}
