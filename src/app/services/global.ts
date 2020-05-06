@@ -1,5 +1,5 @@
 //Variable Global para usar en la App
 export var GLOBAL= {
-  url: process.env.BACKEND_URI || 'http://localhost:3788/api/workdesk/',
+  url: 'https://stark-taiga-97026.herokuapp.com/api/workdesk/',
   keyIdentity:"wdIdentity"
 }
