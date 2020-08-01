@@ -12,6 +12,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
+import { WDPROJECT_COMPONENTS,WdProjectRoutingModule } from './components/wdproject';
 
 //Services
 import { UserService } from './services/user.service';
@@ -28,12 +29,23 @@ import { CreateuserComponent } from './components/createuser/createuser.componen
 
 //Pipes
 import {SearchAccessLinkPipe} from './pipes/searchaccesslink.pipe';
+import { ShortDateTimePipe } from './pipes/short-date-time.pipe';
+import { ShortDatePipe } from './pipes/short-date.pipe';
 
 //Boostrap
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 // Importar custom module
 import { SupportModule } from './support/support.module';
+import { PageheaderComponent } from './components/pageheader/pageheader.component';
+
+const COMPONENTS = [
+  ...WDPROJECT_COMPONENTS
+];
+
+const ROUTES = [
+  WdProjectRoutingModule
+];
 
 @NgModule({
   declarations: [
@@ -43,7 +55,11 @@ import { SupportModule } from './support/support.module';
     RecoverypassComponent,
     ChangepassComponent,
     CreateuserComponent,
-    SearchAccessLinkPipe
+    SearchAccessLinkPipe,
+    PageheaderComponent,
+    ...COMPONENTS,
+    ShortDateTimePipe,
+    ShortDatePipe
   ],
   imports: [
     BrowserModule,
@@ -60,7 +76,8 @@ import { SupportModule } from './support/support.module';
         },
         deps: [ HttpClient ]
       }
-    })
+    }),
+    ...ROUTES
   ],
   providers: [
     appRoutingProviders,

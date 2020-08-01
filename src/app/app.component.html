@@ -1,6 +1,6 @@
 <div class="col-lg-12">
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <a class="navbar-brand" href="#">{{ 'principal.title' | translate }}</a>
+    <a class="navbar-brand" [routerLink]="['/']">{{ 'principal.title' | translate | uppercase }}</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -9,12 +9,11 @@
 
       <ul class="navbar-nav mr-auto" *ngIf="identity">
         <li class="nav-item active">
-          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+          <a class="nav-link" [routerLink]="['/']">{{ 'page.title_access_link' | translate }} <span class="sr-only">(current)</span></a>
         </li>
-        <!--<li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>-->
-
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['wdproject/index']">{{ 'page.title_wd_project' | translate }}</a>
+        </li>
       </ul>
 
       <ul class="navbar-nav ml-auto">

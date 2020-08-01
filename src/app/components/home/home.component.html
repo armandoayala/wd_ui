@@ -1,4 +1,6 @@
-<div class="row">
+<app-pageheader [pageTitle]="title"></app-pageheader>
+
+<div *ngIf="accesslinks && accesslinks.length>0" class="row">
   <div class="col-sm-12 col-md-12 col-lg-12 mb-3">
     <div class="input-group">
       <div class="input-group-prepend">
@@ -7,6 +9,18 @@
       <input type="text" class="form-control" [(ngModel)]="filtersearch" placeholder="{{ 'general.label_search' | translate }}" aria-describedby="basic-addon1">
       <div class="input-group-append">
         <button (click)="openCreateModal(CreateAccessLinkModal)" class="btn btn-outline-secondary" type="button" title="{{ 'home.label_create_accesslink' | translate }}"><i class="fas fa-plus-circle"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!accesslinks || accesslinks.length==0" class="row">
+  <div class="col-sm-12 col-md-12 col-lg-12">
+    <div class="card">
+      <div class="card-body text-center">
+        <h5 class="card-title">{{ 'home.title_create_first_accesslink' | translate }}</h5>
+        <p class="card-text">{{ 'home.description_create_first_accesslink' | translate }}</p>
+        <button (click)="openCreateModal(CreateAccessLinkModal)" class="btn btn-primary btn-circle btn-xl" type="button" title="{{ 'home.label_create_accesslink' | translate }}"><i class="fas fa-plus-circle"></i></button>
       </div>
     </div>
   </div>
@@ -29,11 +43,12 @@
   </div>
 </div>
 
+
 <ng-template #CreateAccessLinkModal let-modal>
-  <div class="modal-header">
+  <div class="modal-header bg-primary text-white">
     <h4 class="modal-title" id="modal-basic-title">{{ 'general.label_create' | translate }}</h4>
     <button type="button" class="close" aria-label="Close" (click)="closeCreateModel('CLOSE')">
-      <span aria-hidden="true">×</span>
+      <span class="text-white" aria-hidden="true">×</span>
     </button>
   </div>
   <div class="modal-body">
@@ -53,7 +68,7 @@
    </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="closeCreateModel('CLOSE')">{{ 'general.label_cancel' | translate }}</button>
-    <button type="button" class="btn btn-outline-dark" (click)="closeCreateModel('SAVE')">{{ 'general.label_save' | translate }}</button>
+    <button type="button" class="btn btn-secondary" (click)="closeCreateModel('CLOSE')">{{ 'general.label_cancel' | translate }}</button>
+    <button type="button" class="btn btn-primary" (click)="closeCreateModel('SAVE')">{{ 'general.label_save' | translate }}</button>
   </div>
 </ng-template>

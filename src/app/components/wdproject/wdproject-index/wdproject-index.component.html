@@ -1,0 +1,106 @@
+<app-app-parent-index [indexTitle]="title">
+
+    <div index-action>
+        <button type="button" class="btn btn-primary"><i class="fas fa-plus-circle"></i>
+            {{ 'general.label_create' | translate }}</button>
+    </div>
+
+    <div index-filter>
+        <div class="row">
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <form (ngSubmit)="reloadResults()" novalidate>
+                    <div class="input-group">
+                        <input type="text" placeholder="{{ 'wdproject.index_label_search' | translate }}"
+                            class="form-control" [(ngModel)]="queryFilter.query" name="query">
+                        <div class="input-group-append" (click)="reloadResults()">
+                            <span class="input-group-text item-action" id="basic-addon2"><i class="fas fa-search"
+                                    title="Buscar"></i></span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <div class="float-right">
+                    <span (click)="applyStatusFilter('INACTIVE')" *ngIf="queryFilter.status=='ACTIVE'"
+                        class="ml-4 item-action"><i class="fas fa-toggle-on fa-lg-extra" title="Activos"></i></span>
+                    <span (click)="applyStatusFilter('ACTIVE')" *ngIf="queryFilter.status=='INACTIVE'"
+                        class="ml-4 item-action"><i class="fas fa-toggle-off fa-lg-extra" title="Inactivos"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div index-body>
+
+        <div *ngIf="showSection('loading')" class="d-flex justify-content-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">{{ 'general.label_loading' | translate }}</span>
+            </div>
+        </div>
+
+        <div *ngIf="showSection('not_found_results')" class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <div class="text-center">
+                    <h5 class="card-title">{{ 'general.message_not_found_results' | translate }}</h5>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="showSection('results')" class="row h-100 justify-content-center align-items-center">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">{{ 'wdproject.index_label_created' | translate }}</th>
+                                <th scope="col">{{ 'wdproject.index_label_last_update' | translate }}</th>
+                                <th scope="col">{{ 'wdproject.index_label_status' | translate }}</th>
+                                <th scope="col">{{ 'general.label_actions' | translate }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of indexModel.result">
+                                <td>{{item.name}}</td>
+                                <td>
+                                    <span *ngIf="item.createdDate!=null">
+                                        {{item.createdDate | shortDateTime}}
+                                    </span>
+                                    <span *ngIf="item.createdDate==null">
+                                        -
+                                    </span>
+                                </td>
+                                <td>
+                                    <span *ngIf="item.updatedDate!=null">
+                                        {{item.updatedDate | shortDateTime}}
+                                    </span>
+                                    <span *ngIf="item.updatedDate==null">
+                                        -
+                                    </span>
+                                </td>
+                                <td>
+                                    <span *ngIf="item.status=='ACTIVE'">{{ 'general.label_active' | translate }}</span>
+                                    <span
+                                        *ngIf="item.status=='INACTIVE'">{{ 'general.label_desactive' | translate }}</span>
+                                </td>
+                                <td>
+
+                                    <span class="item-action"><i class="fas fa-external-link-square-alt fa-lg"
+                                            title="{{ 'general.label_access' | translate }}"></i></span>
+                                    <span class="ml-4 item-action" *ngIf="item.status=='ACTIVE'"><i
+                                            class="fas fa-toggle-on fa-lg" title="{{ 'general.label_active_desactive' | translate }}"></i></span>
+                                    <span class="ml-4 item-action" *ngIf="item.status=='INACTIVE'"><i
+                                            class="fas fa-toggle-off fa-lg" title="{{ 'general.label_active_desactive' | translate }}"></i></span>
+                                    <span class="ml-4 item-action"><i class="fas fa-trash-alt fa-lg"
+                                            title="{{ 'general.label_remove' | translate }}"></i></span>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</app-app-parent-index>

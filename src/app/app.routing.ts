@@ -10,6 +10,7 @@ import { CreateuserComponent } from './components/createuser/createuser.componen
 import {AuthGuard} from './services/auth.guard';
 import {LoginGuard} from './services/login.guard';
 
+
 //La ruta ** se muestra cuando se encuentra una ruta que no est� configurada, es la por defecto en el
 //caso de que el usuario coloque una URL que no existe en la aplicacion
 const appRoutes: Routes = [
@@ -21,7 +22,6 @@ const appRoutes: Routes = [
   {path:'changepass',component: ChangepassComponent,canActivate:[LoginGuard]},
   {path:'createuser',component: CreateuserComponent,canActivate:[LoginGuard]},
   {path:'**',component: HomeComponent, canActivate:[AuthGuard]}
-
 ];
 export const appRoutingProviders:any[]=[];
 export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);

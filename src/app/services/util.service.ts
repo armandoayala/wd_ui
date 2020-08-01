@@ -37,6 +37,7 @@ export class UtilService {
 
     operationResult.genericResponse=null;
     operationResult.httpError=httpError;
+    operationResult.inProgress = false;
     return operationResult;
   }
 

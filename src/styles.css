@@ -2,3 +2,37 @@
 .cursor-pointer{
   cursor: pointer;
 }
+
+.fa-md {
+  font-size: 16px;
+}
+
+.fa-lg {
+  font-size: 20px;
+}
+
+.fa-lg-extra {
+  font-size: 36px;
+}
+
+.item-action{
+  cursor: pointer;
+}
+
+.btn-circle.btn-md { 
+  width: 50px; 
+  height: 50px; 
+  padding: 7px 10px; 
+  border-radius: 25px; 
+  font-size: 12px; 
+  text-align: center; 
+} 
+
+.btn-circle.btn-xl { 
+  width: 70px; 
+  height: 70px; 
+  padding: 10px 16px; 
+  border-radius: 35px; 
+  font-size: 18px;
+  text-align: center; 
+} 

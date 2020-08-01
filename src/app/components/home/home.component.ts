@@ -24,8 +24,9 @@ import { ConfirmationdialogModel } from '../../support/models/Confirmationdialog
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit, DoCheck {
+  public title:string;
   public genericResponse: GenericResponse;
-  public accesslinks: Accesslink[];
+  public accesslinks: Accesslink[]=[];
   public accesslinkFilter: AccesslinkFilter;
   public operationResult: OperationResult;
   public filtersearch: String;
@@ -38,11 +39,13 @@ export class HomeComponent implements OnInit, DoCheck {
     private _alertService: AlertService,
     private _utilService: UtilService,
     private _confirmationdialogService: ConfirmationdialogService,
-    private modalService: NgbModal) {
-    this.accesslinkFilter = new AccesslinkFilter("", true);
-    this.operationResult = new OperationResult(null, "", false);
-    this.filtersearch = null;
-    this.accessLinkEntity = new AccesslinkCreate("", "", "", false);
+    private modalService: NgbModal) 
+    {
+     this.title="page.title_access_link";
+     this.accesslinkFilter = new AccesslinkFilter("", true);
+     this.operationResult = new OperationResult(null, "", false);
+     this.filtersearch = null;
+     this.accessLinkEntity = new AccesslinkCreate("", "", "", false);
   }
 
   ngDoCheck(): void {

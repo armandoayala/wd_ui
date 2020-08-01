@@ -19,10 +19,19 @@
     "label_cancel":"Cancel",
     "label_create":"Create",
     "title_confirmation":"Confirmation",
-    "message_confirmation":"Are you sure you want to do the action?"
+    "message_confirmation":"Are you sure you want to do the action?",
+    "message_not_found_results":"No results found",
+    "label_name":"Name",
+    "label_loading":"Loading...",
+    "label_active":"Active",
+    "label_desactive":"Inactive",
+    "label_actions":"Actions",
+    "label_active_desactive":"Activate/ Inactivate"
   },
   "home":{
-    "label_create_accesslink":"Create access link"
+    "label_create_accesslink":"Create access link",
+    "title_create_first_accesslink":"Create your first quick access!",
+    "description_create_first_accesslink":"Quick accesses are links to your favorite pages."
   },
   "login": {
     "title_form": "Log in",
@@ -65,6 +74,20 @@
     "title": "Workdesk",
     "label_user_data": "Profile",
     "label_logout": "Logout"
+  },
+  "page":
+  {
+    "title_access_link":"Links",
+    "title_wd_project":"Projects"
+  },
+  "wdproject":
+  {
+    "title_create_first":"Create your first WDProject!",
+    "description_create_first":"WDProjects allow you to organize data about your projects.",
+    "index_label_search":"Name",
+    "index_label_status":"Status",
+    "index_label_last_update":"Updated",
+    "index_label_created":"Created"
   }
 
 }

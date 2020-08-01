@@ -10,11 +10,13 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 //Import components
 import { ConfirmationdialogComponent } from './components/confirmationdialog/confirmationdialog.component';
+import { AppParentIndexComponent } from './components/app-parent-index/app-parent-index.component';
 
 //Import Services
 import { ConfirmationdialogService } from './services/confirmationdialog.service';
 
-// Decorar ngModule para cargar los componentes y la configuraci�n del modulo
+
+// Decorar ngModule para cargar los componentes y la configuracion del modulo
 @NgModule({
    imports:[
        CommonModule, 
@@ -31,14 +33,17 @@ import { ConfirmationdialogService } from './services/confirmationdialog.service
       })
        ],
    declarations:[
-    ConfirmationdialogComponent
+    ConfirmationdialogComponent,
+    AppParentIndexComponent
    ],
    providers: [
     ConfirmationdialogService
    ],
    entryComponents: [ 
-       ConfirmationdialogComponent 
+       ConfirmationdialogComponent
    ],
-   exports: [ConfirmationdialogComponent]
+   exports: [ConfirmationdialogComponent,
+            AppParentIndexComponent
+   ]
 })
 export class SupportModule{}
