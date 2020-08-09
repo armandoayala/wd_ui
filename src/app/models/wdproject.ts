@@ -18,7 +18,7 @@ export class WDProject {
     public href: string;
     public client: string;
     public status: string;
-    public data: WDData[];
+    public wddata: WDData[];
     public createdDate: Date;
     public createdUnix: Number;
     public updatedDate: Date;

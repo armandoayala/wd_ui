@@ -62,7 +62,9 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let item of indexModel.result">
-                                <td>{{item.name}}</td>
+                                <td>
+                                    <a [routerLink]="['/wdproject/edit', item._id]">{{item.name}}</a>
+                                </td>
                                 <td>
                                     <span *ngIf="item.client && item.client!=null">
                                         {{item.client}}
@@ -114,7 +116,8 @@
         <div *ngIf="showSection('results')" class="row">
             <div class="col-sm-12 col-md-12 col-lg-12">
                 <div class="float-right">
-                    <app-pagination (onSelectedPage)="onSelectedPageEvent($event)" [total]="indexModel.count" [sizePage]="pageFilter.limit"></app-pagination>
+                    <app-pagination (onSelectedPage)="onSelectedPageEvent($event)" [total]="indexModel.count"
+                        [sizePage]="pageFilter.limit"></app-pagination>
                 </div>
             </div>
         </div>

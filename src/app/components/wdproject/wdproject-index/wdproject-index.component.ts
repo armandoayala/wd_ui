@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { Router, ActivatedRoute } from '@angular/router';
 
 //Services
 import { UserService } from '../../../services/user.service';
@@ -46,7 +47,9 @@ export class WdprojectIndexComponent implements OnInit {
     private _alertService: AlertService,
     private _utilService: UtilService,
     private _confirmationdialogService: ConfirmationdialogService,
-    private modalService: NgbModal) {
+    private modalService: NgbModal,
+    private route: ActivatedRoute,
+    private router: Router) {
     this.title = "page.title_wd_project";
     //this.queryFilter = { status: Status.ACTIVE, query: null, extras: [{ "field_n": "value_filter"}] }
     this.queryFilter = { status: Status.ACTIVE, query: null, extras: [] }

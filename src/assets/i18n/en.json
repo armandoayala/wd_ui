@@ -27,7 +27,8 @@
     "label_desactive":"Inactive",
     "label_actions":"Actions",
     "label_active_desactive":"Activate/ Inactivate",
-    "label_client":"Client"
+    "label_client":"Client",
+    "label_reload":"Reload"
   },
   "home":{
     "label_create_accesslink":"Create access link",

@@ -5,6 +5,7 @@ import { UserService } from './user.service';
 
 import { GenericResponse } from '../models/genericresponse';
 import { WDProject, WDData } from '../models/wdproject';
+import { WDProjectUpdate } from '../models/ui/wdprojectupdate';
 import { GenericFilter } from '../models/generic-filter';
 
 import { Observable } from 'rxjs';
@@ -26,8 +27,16 @@ export class WdprojectService {
     return this._http.post<GenericResponse>(this.url + 'wdproject/find', filter, this._apiService.getRequestOptions(page, limit));
   }
 
+  findById(id: string): Observable<GenericResponse> {
+    return this._http.get<GenericResponse>(this.url + 'wdproject/find/' + id, this._apiService.postRequestOptions());
+  }
+
   create(entity: WDProject): Observable<GenericResponse> {
     return this._http.post<GenericResponse>(this.url + 'wdproject/create', entity, this._apiService.postRequestOptions());
+  }
+
+  update(id: string, data: any): Observable<GenericResponse> {
+    return this._http.put<GenericResponse>(this.url + 'wdproject/update/' + id, data, this._apiService.postRequestOptions());
   }
 
   delete(id: string): Observable<GenericResponse> {
