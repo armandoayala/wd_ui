@@ -9,5 +9,6 @@ export var CONSTANT= {
       label:'English',
       lang:'en'
     }
-  ]
+  ],
+  page_limit:10
 }

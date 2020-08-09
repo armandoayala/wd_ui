@@ -1,7 +1,8 @@
 <app-app-parent-index [indexTitle]="title">
 
     <div index-action>
-        <button type="button" class="btn btn-primary"><i class="fas fa-plus-circle"></i>
+        <button (click)="openCreateModal(CreateWDProjectModal)" type="button" class="btn btn-primary"><i
+                class="fas fa-plus-circle"></i>
             {{ 'general.label_create' | translate }}</button>
     </div>
 
@@ -38,10 +39,10 @@
             </div>
         </div>
 
-        <div *ngIf="showSection('not_found_results')" class="row">
+        <div *ngIf="showSection('not_found_results')" class="row mt-3">
             <div class="col-sm-12 col-md-12 col-lg-12">
                 <div class="text-center">
-                    <h5 class="card-title">{{ 'general.message_not_found_results' | translate }}</h5>
+                    <h4>{{ 'general.message_not_found_results' | translate }}</h4>
                 </div>
             </div>
         </div>
@@ -49,11 +50,11 @@
         <div *ngIf="showSection('results')" class="row h-100 justify-content-center align-items-center">
             <div class="col-sm-12 col-md-12 col-lg-12">
                 <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table class="table table-striped table-bordered">
                         <thead class="thead-dark">
                             <tr>
-                                <th scope="col">Name</th>
-                                <th scope="col">{{ 'wdproject.index_label_created' | translate }}</th>
+                                <th scope="col">{{ 'general.label_name' | translate }}</th>
+                                <th scope="col">{{ 'general.label_client' | translate }}</th>
                                 <th scope="col">{{ 'wdproject.index_label_last_update' | translate }}</th>
                                 <th scope="col">{{ 'wdproject.index_label_status' | translate }}</th>
                                 <th scope="col">{{ 'general.label_actions' | translate }}</th>
@@ -63,10 +64,10 @@
                             <tr *ngFor="let item of indexModel.result">
                                 <td>{{item.name}}</td>
                                 <td>
-                                    <span *ngIf="item.createdDate!=null">
-                                        {{item.createdDate | shortDateTime}}
+                                    <span *ngIf="item.client && item.client!=null">
+                                        {{item.client}}
                                     </span>
-                                    <span *ngIf="item.createdDate==null">
+                                    <span *ngIf="!item.client || item.client==null">
                                         -
                                     </span>
                                 </td>
@@ -85,13 +86,21 @@
                                 </td>
                                 <td>
 
-                                    <span class="item-action"><i class="fas fa-external-link-square-alt fa-lg"
-                                            title="{{ 'general.label_access' | translate }}"></i></span>
-                                    <span class="ml-4 item-action" *ngIf="item.status=='ACTIVE'"><i
-                                            class="fas fa-toggle-on fa-lg" title="{{ 'general.label_active_desactive' | translate }}"></i></span>
-                                    <span class="ml-4 item-action" *ngIf="item.status=='INACTIVE'"><i
-                                            class="fas fa-toggle-off fa-lg" title="{{ 'general.label_active_desactive' | translate }}"></i></span>
-                                    <span class="ml-4 item-action"><i class="fas fa-trash-alt fa-lg"
+                                    <span *ngIf="item.href && item.href!=null" (click)="openExternalLink(item.href)"
+                                        class="item-action"><i class="fas fa-external-link-square-alt fa-lg"
+                                            title="{{ 'wdproject.index_label_href' | translate }}"></i></span>
+                                    <span *ngIf="!item.href || item.href==null"><i
+                                            class="fas fa-unlink fa-lg text-secondary"
+                                            title="{{ 'wdproject.index_label_unlink' | translate }}"></i></span>
+                                    <span (click)="openConfirmationDialog(item._id,'INACTIVATE')"
+                                        class="ml-4 item-action" *ngIf="item.status=='ACTIVE'"><i
+                                            class="fas fa-toggle-on fa-lg"
+                                            title="{{ 'general.label_active_desactive' | translate }}"></i></span>
+                                    <span (click)="openConfirmationDialog(item._id,'ACTIVATE')" class="ml-4 item-action"
+                                        *ngIf="item.status=='INACTIVE'"><i class="fas fa-toggle-off fa-lg"
+                                            title="{{ 'general.label_active_desactive' | translate }}"></i></span>
+                                    <span (click)="openConfirmationDialog(item._id,'DELETE')"
+                                        class="ml-4 item-action"><i class="fas fa-trash-alt fa-lg"
                                             title="{{ 'general.label_remove' | translate }}"></i></span>
 
                                 </td>
@@ -101,6 +110,48 @@
                 </div>
             </div>
         </div>
+
+        <div *ngIf="showSection('results')" class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <div class="float-right">
+                    <app-pagination (onSelectedPage)="onSelectedPageEvent($event)" [total]="indexModel.count" [sizePage]="pageFilter.limit"></app-pagination>
+                </div>
+            </div>
+        </div>
     </div>
 
 </app-app-parent-index>
+
+<ng-template #CreateWDProjectModal let-modal>
+    <div class="modal-header bg-primary text-white">
+        <h4 class="modal-title" id="modal-basic-title">{{ 'general.label_create' | translate }}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeCreateModel('CLOSE')">
+            <span class="text-white" aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [ngClass]="{'was-validated': entityToCreate.isNotValid==true}">
+            <div class="form-group">
+                <label class="font-weight-bold" for="title">{{ 'general.label_name' | translate }}</label>
+                <input type="text" class="form-control" id="name" name="name" #title="ngModel"
+                    [(ngModel)]="entityToCreate.name" required>
+            </div>
+            <div class="form-group">
+                <label for="client">{{ 'general.label_client' | translate }}</label>
+                <input type="text" class="form-control" id="client" name="client" #client="ngModel"
+                    [(ngModel)]="entityToCreate.client">
+            </div>
+            <div class="form-group">
+                <label for="href">{{ 'general.url' | translate }}</label>
+                <input type="text" class="form-control" id="href" name="href" #href="ngModel"
+                    [(ngModel)]="entityToCreate.href">
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary"
+            (click)="closeCreateModel('CLOSE')">{{ 'general.label_cancel' | translate }}</button>
+        <button type="button" class="btn btn-primary"
+            (click)="closeCreateModel('SAVE')">{{ 'general.label_save' | translate }}</button>
+    </div>
+</ng-template>

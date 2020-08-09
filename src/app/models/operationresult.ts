@@ -7,6 +7,8 @@ export class OperationResult{
   public inProgress: Boolean;
   public genericResponse:GenericResponse;
   public httpError:any;
+  public status:number;
+  public statusText:string;
 
   constructor(
     //Se puede declarar aqui las propiedades como forma de atajo,

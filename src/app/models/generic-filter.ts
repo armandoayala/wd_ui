@@ -1,12 +1,16 @@
-export class ExtraFilter {
-    field: string
-    value: string
+export class PageFilter {
+    constructor(
+        public page: number,
+        public limit: number
+    ) {
+
+    }
 }
 
 export class QueryFilter {
     status: string
     query: string
-    extras: ExtraFilter[]
+    extras: Object[]
 }
 
 export class GenericFilter {

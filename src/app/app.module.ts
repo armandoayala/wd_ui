@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { routing, appRoutingProviders } from './app.routing';
 import {HttpClient,HttpClientModule} from '@angular/common/http';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 //Translation
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -62,6 +63,7 @@ const ROUTES = [
     ShortDatePipe
   ],
   imports: [
+    CKEditorModule,
     BrowserModule,
     FormsModule,
     routing,

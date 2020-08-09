@@ -26,7 +26,8 @@
     "label_active":"Active",
     "label_desactive":"Inactive",
     "label_actions":"Actions",
-    "label_active_desactive":"Activate/ Inactivate"
+    "label_active_desactive":"Activate/ Inactivate",
+    "label_client":"Client"
   },
   "home":{
     "label_create_accesslink":"Create access link",
@@ -84,10 +85,12 @@
   {
     "title_create_first":"Create your first WDProject!",
     "description_create_first":"WDProjects allow you to organize data about your projects.",
-    "index_label_search":"Name",
+    "index_label_search":"Name, Client",
     "index_label_status":"Status",
     "index_label_last_update":"Updated",
-    "index_label_created":"Created"
+    "index_label_created":"Created",
+    "index_label_href":"External link",
+    "index_label_unlink":"There is no external link"
   }
 
 }

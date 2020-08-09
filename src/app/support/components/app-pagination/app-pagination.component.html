@@ -1,0 +1,17 @@
+<ul class="pagination">
+    <li class="page-item">
+        <button (click)="sendOnSelectEventPrevius()" class="btn btn-link page-link" type="button" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+            <span class="sr-only">Previous</span>
+        </button>
+    </li>
+    <li *ngFor="let number of numbers" [ngClass]="(lastPageSelected==number)?'page-item active':'page-item'">
+        <button (click)="sendOnSelectEvent(number)" type="button" class="btn btn-link page-link">{{number+1}}</button>
+    </li>
+    <li class="page-item">
+        <button (click)="sendOnSelectEventNext()" class="btn btn-link page-link" type="button" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+            <span class="sr-only">Next</span>
+        </button>
+    </li>
+</ul>

@@ -1,1 +1,16 @@
-<p>wdproject-edit works!</p>
+<app-app-parent-index [indexTitle]="title">
+    <div index-action>
+        <button (click)="onSave()" type="button" class="btn btn-primary"><i class="fas fa-save"></i>
+            {{ 'general.label_save' | translate }}</button>
+    </div>
+
+    <div index-filter></div>
+
+    <div index-body>
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <ckeditor id="editor" [(ngModel)]="model.editorData" [editor]="Editor"></ckeditor>
+            </div>
+        </div>
+    </div>
+</app-app-parent-index>

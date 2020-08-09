@@ -54,11 +54,11 @@
   <div class="modal-body">
    <form [ngClass]="{'was-validated': accessLinkEntity.isNotValid==true}">
     <div class="form-group">
-      <label for="title">{{ 'general.title' | translate }}</label>
+      <label class="font-weight-bold" for="title">{{ 'general.title' | translate }}</label>
       <input type="text" class="form-control" id="title" name="title" #title="ngModel" [(ngModel)]="accessLinkEntity.title" required>
     </div>
     <div class="form-group">
-      <label for="url">{{ 'general.url' | translate }}</label>
+      <label class="font-weight-bold" for="url">{{ 'general.url' | translate }}</label>
       <input type="text" class="form-control" id="url" name="url" #url="ngModel" [(ngModel)]="accessLinkEntity.url" required>
     </div>
     <div class="form-group">

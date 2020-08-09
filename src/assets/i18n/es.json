@@ -26,7 +26,8 @@
     "label_active":"Activo",
     "label_desactive":"Inactivo",
     "label_actions":"Acciones",
-    "label_active_desactive":"Activar/ Desactivar"
+    "label_active_desactive":"Activar/ Desactivar",
+    "label_client":"Cliente"
   },
   "home":{
     "label_create_accesslink":"Crear link de acceso",
@@ -84,10 +85,12 @@
   {
     "title_create_first":"¡Crea tu primer WDProject!",
     "description_create_first":"Los WDProject te permiten organizar datos sobre tus proyectos.",
-    "index_label_search":"Nombre",
+    "index_label_search":"Nombre, Cliente",
     "index_label_status":"Estado",
     "index_label_last_update":"Actualizado",
-    "index_label_created":"Creado"
+    "index_label_created":"Creado",
+    "index_label_href":"Enlace externo",
+    "index_label_unlink":"No posee enlace externo"
   }
 
 }

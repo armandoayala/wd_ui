@@ -16,6 +16,7 @@ export class WDProject {
     public name: string;
     public note: string;
     public href: string;
+    public client: string;
     public status: string;
     public data: WDData[];
     public createdDate: Date;
@@ -25,5 +26,15 @@ export class WDProject {
 
     constructor() {
     }
+
+    static instanceToSave(pName:string,pHref:string,pClient:string) : WDProject {
+
+        var entity= new WDProject();
+        entity.name=pName;
+        entity.href=pHref;
+        entity.client=pClient;
+    
+        return entity;
+      }
 
 }
