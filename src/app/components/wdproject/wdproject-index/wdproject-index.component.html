@@ -52,20 +52,20 @@
                 <div class="table-responsive">
                     <table class="table table-striped table-bordered">
                         <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">{{ 'general.label_name' | translate }}</th>
-                                <th scope="col">{{ 'general.label_client' | translate }}</th>
-                                <th scope="col">{{ 'wdproject.index_label_last_update' | translate }}</th>
-                                <th scope="col">{{ 'wdproject.index_label_status' | translate }}</th>
-                                <th scope="col">{{ 'general.label_actions' | translate }}</th>
+                            <tr class="d-flex">
+                                <th class="col-3" scope="col">{{ 'general.label_name' | translate }}</th>
+                                <th class="col-3" scope="col">{{ 'general.label_client' | translate }}</th>
+                                <th class="col-2" scope="col">{{ 'wdproject.index_label_last_update' | translate }}</th>
+                                <th class="col-2" scope="col">{{ 'wdproject.index_label_status' | translate }}</th>
+                                <th class="col-2" scope="col">{{ 'general.label_actions' | translate }}</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let item of indexModel.result">
-                                <td>
+                            <tr class="d-flex" *ngFor="let item of indexModel.result">
+                                <td class="col-3">
                                     <a [routerLink]="['/wdproject/edit', item._id]">{{item.name}}</a>
                                 </td>
-                                <td>
+                                <td class="col-3">
                                     <span *ngIf="item.client && item.client!=null">
                                         {{item.client}}
                                     </span>
@@ -73,7 +73,7 @@
                                         -
                                     </span>
                                 </td>
-                                <td>
+                                <td class="col-2">
                                     <span *ngIf="item.updatedDate!=null">
                                         {{item.updatedDate | shortDateTime}}
                                     </span>
@@ -81,12 +81,12 @@
                                         -
                                     </span>
                                 </td>
-                                <td>
+                                <td class="col-2">
                                     <span *ngIf="item.status=='ACTIVE'">{{ 'general.label_active' | translate }}</span>
                                     <span
                                         *ngIf="item.status=='INACTIVE'">{{ 'general.label_desactive' | translate }}</span>
                                 </td>
-                                <td>
+                                <td class="col-2">
 
                                     <span *ngIf="item.href && item.href!=null" (click)="openExternalLink(item.href)"
                                         class="item-action"><i class="fas fa-external-link-square-alt fa-lg"

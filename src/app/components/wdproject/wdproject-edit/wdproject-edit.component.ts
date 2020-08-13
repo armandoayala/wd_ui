@@ -18,8 +18,8 @@ import { CONSTANT } from '../../../services/constant';
 import { GenericResponse } from '../../../models/genericresponse';
 import { OperationResult } from '../../../models/operationresult';
 import { WDProject, WDData } from '../../../models/wdproject';
-import { WDProjectUpdate } from '../../../models/ui/wdprojectupdate';
 import { Alert } from '../../../models/ui/alertui';
+import { WDDataAdd } from '../../../models/ui/wdprojectupdate';
 import { Status } from '../../../models/status';
 import { ConfirmationdialogModel } from '../../../support/models/ConfirmationdialogModel';
 
@@ -36,11 +36,13 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
   public editorRef: any;
   public genericResponse: GenericResponse;
   public operationResult: OperationResult;
-  public wdProjectEntity: WDProject;
-  public wdProjectUpdate: WDProjectUpdate;
+  public wdProjectEntity: WDProject = new WDProject();
+  public wdDataAddEntity: WDDataAdd = new WDDataAdd();
   public model = {
     id: null
   };
+
+  private modalRef;
 
   constructor(private translate: TranslateService,
     private _userService: UserService,
@@ -87,6 +89,17 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
       });
   }
 
+  showSection(name: string): Boolean {
+    switch (name) {
+      case 'wddata_empty':
+        return !this.wdProjectEntity.wddata || this.wdProjectEntity.wddata.length == 0
+      case 'wddata_results':
+        return this.wdProjectEntity.wddata && this.wdProjectEntity.wddata.length > 0;
+      default:
+        return false;
+    }
+  }
+
   loadData() {
     this.operationResult.inProgress = true;
     this._wdprojectService.findById(this.model.id).subscribe(
@@ -118,6 +131,8 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
         return this.operationResult.inProgress
       case 'onReload':
         return this.operationResult.inProgress
+      case 'onWDDataAdd':
+        return this.operationResult.inProgress
       default:
         return false;
     }
@@ -126,6 +141,61 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
 
   onReload() {
     this.loadData()
+  }
+
+  openExternalLink(url: string) {
+    if (url) {
+      window.open(url, "_blank");
+    }
+  }
+
+  onCheckboxEncode(e) {
+    if (e.target.checked) {
+      this.wdDataAddEntity.encode = true;
+    } else {
+      this.wdDataAddEntity.encode = false;
+    }
+  }
+
+  onCheckboxIsHref(e) {
+    if (e.target.checked) {
+      this.wdDataAddEntity.isHref = true;
+    } else {
+      this.wdDataAddEntity.isHref = false;
+    }
+  }
+
+  openConfirmationDialog(itemId: string, operation: string) {
+    this._confirmationdialogService.confirm(ConfirmationdialogModel.defaultDialog())
+      .then((confirmed) => {
+        if (confirmed == true) {
+          if (operation == 'DELETE_WDDATA') {
+            this.deleteItemWdData(itemId);
+          }
+        }
+      })
+      .catch(() => { });
+  }
+
+  deleteItemWdData(itemId: string) {
+    this._wdprojectService.deleteWDData(this.model.id, { id: itemId }).subscribe(
+      response => {
+        this.operationResult = this._utilService.processGenericResponse(response);
+
+        if (!this.operationResult.error) {
+          this._alertService.showAlert(new Alert("general.message_action_success", "success"));
+
+          this.loadData();
+        }
+        else {
+          this._alertService.showAlert(new Alert(this.operationResult.message, "danger"));
+        }
+      },
+      httpError => {
+        this.operationResult = this._utilService.processHttpError(httpError);
+        this._alertService.showAlert(new Alert(this.operationResult.message, "danger"));
+      }
+    );
   }
 
   onNoteSave() {
@@ -153,6 +223,84 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
         this._alertService.showAlert(new Alert(this.operationResult.message, "danger"));
       }
     );
+  }
+
+  onWDDataAdd() {
+    console.log("Add WDData");
+  }
+
+  wdDataOpenCreatModal(content) {
+
+    this.modalRef = this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
+
+    this.modalRef.result.then((result) => {
+      this.wdDataCleanEntityToCreate();
+    }, (reason) => {
+      this.wdDataCleanEntityToCreate();
+    });
+
+  }
+
+  wdDataCloseCreateModel(reason) {
+    if (reason === "SAVE" && this.wdDataValidatCreate()) {
+      this.wdDataSaveEntityToCreate();
+    }
+
+    if (reason === "CLOSE") {
+      this.modalRef.dismiss("close");
+    }
+  }
+
+  wdDataSaveEntityToCreate() {
+    var wdWDDataToSave = WDData.instanceToSave(this.wdDataAddEntity.name, this.wdDataAddEntity.value,
+      this.wdDataAddEntity.url, this.wdDataAddEntity.isHref, this.wdDataAddEntity.encode);
+
+    this._wdprojectService.addWDData(this.model.id, wdWDDataToSave).subscribe(
+      response => {
+        this.operationResult = this._utilService.processGenericResponse(response);
+
+        if (!this.operationResult.error) {
+          this.modalRef.close(this.wdDataAddEntity);
+          this._alertService.showAlert(new Alert("general.message_action_success", "success"));
+
+          this.loadData()
+        }
+        else {
+          this.modalRef.dismiss("close");
+          this._alertService.showAlert(new Alert(this.operationResult.message, "danger"));
+        }
+      },
+      httpError => {
+        this.operationResult = this._utilService.processHttpError(httpError);
+        this.modalRef.dismiss("close");
+        this._alertService.showAlert(new Alert(this.operationResult.message, "danger"));
+      }
+    );
+
+  }
+
+  wdDataValidatCreate() {
+    if (!this.wdDataAddEntity.name) {
+      this.wdDataAddEntity.isNotValid = true;
+      return false;
+    }
+
+    if (!this.wdDataAddEntity.value) {
+      this.wdDataAddEntity.isNotValid = true;
+      return false;
+    }
+
+    this.wdDataAddEntity.isNotValid = false;
+    return true;
+  }
+
+  wdDataCleanEntityToCreate() {
+    this.wdDataAddEntity.name = "";
+    this.wdDataAddEntity.value = "";
+    this.wdDataAddEntity.url = "";
+    this.wdDataAddEntity.isHref = false;
+    this.wdDataAddEntity.encode = false;
+    this.wdDataAddEntity.isNotValid = false;
   }
 
 }

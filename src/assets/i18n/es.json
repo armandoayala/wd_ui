@@ -6,34 +6,38 @@
     "title_welcome": "Bienvenido",
     "message_wait_request": "Por favor aguarde, estamos procesando la solicitud...",
     "message_text_error": "Lo sentimos, ha ocurrido el siguiente error:",
-    "message_action_success":"Acción exitosa",
+    "message_action_success": "Acción exitosa",
     "label_email": "Email",
     "label_password": "Password",
     "placeholder_email": "Ingrese email",
     "placeholder_password": "Ingrese password",
-    "label_access":"Acceder",
-    "label_search":"Búsqueda",
-    "label_remove":"Eliminar",
-    "label_save":"Guardar",
-    "label_accept":"Aceptar",
-    "label_cancel":"Cancelar",
-    "label_create":"Crear",
-    "title_confirmation":"Confirmación",
-    "message_confirmation":"¿Estás seguro que desea realizar la acción?",
-    "message_not_found_results":"No se han encontrado resultados",
-    "label_name":"Nombre",
-    "label_loading":"Procesando...",
-    "label_active":"Activo",
-    "label_desactive":"Inactivo",
-    "label_actions":"Acciones",
-    "label_active_desactive":"Activar/ Desactivar",
-    "label_client":"Cliente",
-    "label_reload":"Recargar"
+    "label_access": "Acceder",
+    "label_search": "Búsqueda",
+    "label_remove": "Eliminar",
+    "label_save": "Guardar",
+    "label_accept": "Aceptar",
+    "label_cancel": "Cancelar",
+    "label_create": "Crear",
+    "title_confirmation": "Confirmación",
+    "message_confirmation": "¿Estás seguro que desea realizar la acción?",
+    "message_not_found_results": "No se han encontrado resultados",
+    "label_name": "Nombre",
+    "label_loading": "Procesando...",
+    "label_active": "Activo",
+    "label_desactive": "Inactivo",
+    "label_actions": "Acciones",
+    "label_active_desactive": "Activar/ Desactivar",
+    "label_client": "Cliente",
+    "label_reload": "Recargar",
+    "label_add": "Agregar",
+    "label_value": "Valor",
+    "label_encode": "Codificar",
+    "label_encrypt": "Encriptar"
   },
-  "home":{
-    "label_create_accesslink":"Crear link de acceso",
-    "title_create_first_accesslink":"¡Crea tu primer acceso rápido!",
-    "description_create_first_accesslink":"Los accesos rápidos son links a tus páginas preferidas."
+  "home": {
+    "label_create_accesslink": "Crear link de acceso",
+    "title_create_first_accesslink": "¡Crea tu primer acceso rápido!",
+    "description_create_first_accesslink": "Los accesos rápidos son links a tus páginas preferidas."
   },
   "login": {
     "title_form": "Iniciar sesión",
@@ -77,21 +81,19 @@
     "label_user_data": "Mis datos",
     "label_logout": "Salir"
   },
-  "page":
-  {
-    "title_access_link":"Enlaces",
-    "title_wd_project":"Proyectos"
+  "page": {
+    "title_access_link": "Enlaces",
+    "title_wd_project": "Proyectos"
   },
-  "wdproject":
-  {
-    "title_create_first":"¡Crea tu primer WDProject!",
-    "description_create_first":"Los WDProject te permiten organizar datos sobre tus proyectos.",
-    "index_label_search":"Nombre, Cliente",
-    "index_label_status":"Estado",
-    "index_label_last_update":"Actualizado",
-    "index_label_created":"Creado",
-    "index_label_href":"Enlace externo",
-    "index_label_unlink":"No posee enlace externo"
+  "wdproject": {
+    "title_create_first": "¡Crea tu primer WDProject!",
+    "description_create_first": "Los WDProject te permiten organizar datos sobre tus proyectos.",
+    "index_label_search": "Nombre, Cliente",
+    "index_label_status": "Estado",
+    "index_label_last_update": "Actualizado",
+    "index_label_created": "Creado",
+    "index_label_href": "Enlace externo",
+    "index_label_unlink": "No posee enlace externo",
+    "edit_label_is_href": "¿Valor es link?"
   }
-
 }

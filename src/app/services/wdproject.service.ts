@@ -5,7 +5,7 @@ import { UserService } from './user.service';
 
 import { GenericResponse } from '../models/genericresponse';
 import { WDProject, WDData } from '../models/wdproject';
-import { WDProjectUpdate } from '../models/ui/wdprojectupdate';
+import { WDProjectUpdate, WDDataAdd } from '../models/ui/wdprojectupdate';
 import { GenericFilter } from '../models/generic-filter';
 
 import { Observable } from 'rxjs';
@@ -49,6 +49,14 @@ export class WdprojectService {
 
   inactivate(id: string): Observable<GenericResponse> {
     return this._http.put<GenericResponse>(this.url + 'wdproject/inactivate/' + id, null, this._apiService.postRequestOptions());
+  }
+
+  addWDData(id: string, entity: any): Observable<GenericResponse> {
+    return this._http.post<GenericResponse>(this.url + 'wdproject/wddata/' + id, entity, this._apiService.postRequestOptions());
+  }
+
+  deleteWDData(id: string, data: any): Observable<GenericResponse> {
+    return this._http.post<GenericResponse>(this.url + 'wdproject/delete-wddata/' + id, data, this._apiService.postRequestOptions());
   }
 
 }
