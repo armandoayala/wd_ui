@@ -39,6 +39,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 // Importar custom module
 import { SupportModule } from './support/support.module';
 import { PageheaderComponent } from './components/pageheader/pageheader.component';
+import { SearchgenericdataPipe } from './pipes/searchgenericdata.pipe';
 
 const COMPONENTS = [
   ...WDPROJECT_COMPONENTS
@@ -60,7 +61,8 @@ const ROUTES = [
     PageheaderComponent,
     ...COMPONENTS,
     ShortDateTimePipe,
-    ShortDatePipe
+    ShortDatePipe,
+    SearchgenericdataPipe
   ],
   imports: [
     CKEditorModule,

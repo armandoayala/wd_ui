@@ -137,6 +137,7 @@ export class WdprojectIndexComponent implements OnInit {
     var wdProjectToSave = WDProject.instanceToSave(this.entityToCreate.name,
       this.entityToCreate.href, this.entityToCreate.client);
 
+      this.operationResult.inProgress = true;
     this._wdprojectService.create(wdProjectToSave).subscribe(
       response => {
         this.operationResult = this._utilService.processGenericResponse(response);

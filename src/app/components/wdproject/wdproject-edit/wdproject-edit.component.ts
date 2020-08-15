@@ -38,9 +38,12 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
   public operationResult: OperationResult;
   public wdProjectEntity: WDProject = new WDProject();
   public wdDataAddEntity: WDDataAdd = new WDDataAdd();
+  public wdProjectEntityToUpdate: WDProject = new WDProject();
+  public wdProjectIsNotValidToUpdate: boolean = false;
   public model = {
     id: null
   };
+  public filtersearch: String;
 
   private modalRef;
 
@@ -56,6 +59,7 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
   ) {
     this.title = "PROJECT";
     this.operationResult = new OperationResult(null, "", false);
+    this.filtersearch = null;
   }
 
   ngOnInit() {
@@ -110,6 +114,11 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
           this.wdProjectEntity = this.operationResult.genericResponse.data;
           this.title = this.wdProjectEntity.name
           this.editorRef.setData(this.wdProjectEntity.note)
+
+          this.wdProjectEntityToUpdate.name = this.wdProjectEntity.name
+          this.wdProjectEntityToUpdate.client = this.wdProjectEntity.client
+          this.wdProjectEntityToUpdate.href = this.wdProjectEntity.href
+          this.wdProjectEntityToUpdate.status = this.wdProjectEntity.status
         }
         else {
           this._alertService.showAlert(new Alert(this.operationResult.message, "danger"));
@@ -178,6 +187,9 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
   }
 
   deleteItemWdData(itemId: string) {
+
+    this.operationResult.inProgress = true;
+
     this._wdprojectService.deleteWDData(this.model.id, { id: itemId }).subscribe(
       response => {
         this.operationResult = this._utilService.processGenericResponse(response);
@@ -211,6 +223,7 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
         this.operationResult = this._utilService.processGenericResponse(response);
 
         if (!this.operationResult.error) {
+          this._alertService.showAlert(new Alert("general.message_action_success", "success"));
           this.wdProjectEntity = this.operationResult.genericResponse.data;
         }
         else {
@@ -223,10 +236,6 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
         this._alertService.showAlert(new Alert(this.operationResult.message, "danger"));
       }
     );
-  }
-
-  onWDDataAdd() {
-    console.log("Add WDData");
   }
 
   wdDataOpenCreatModal(content) {
@@ -252,9 +261,11 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
   }
 
   wdDataSaveEntityToCreate() {
+
     var wdWDDataToSave = WDData.instanceToSave(this.wdDataAddEntity.name, this.wdDataAddEntity.value,
       this.wdDataAddEntity.url, this.wdDataAddEntity.isHref, this.wdDataAddEntity.encode);
 
+    this.operationResult.inProgress = true;
     this._wdprojectService.addWDData(this.model.id, wdWDDataToSave).subscribe(
       response => {
         this.operationResult = this._utilService.processGenericResponse(response);
@@ -301,6 +312,101 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
     this.wdDataAddEntity.isHref = false;
     this.wdDataAddEntity.encode = false;
     this.wdDataAddEntity.isNotValid = false;
+  }
+
+  onCheckboxIsActiveProject(e) {
+    if (e.target.checked) {
+      this.wdProjectEntity.status = Status.ACTIVE;
+    } else {
+      this.wdProjectEntity.status = Status.INACTIVE;
+    }
+  }
+
+  validateWDProjectToUpdate() {
+    if (!this.wdProjectEntityToUpdate.name) {
+      this.wdProjectIsNotValidToUpdate = true;
+      return false;
+    }
+
+    this.wdProjectIsNotValidToUpdate = false;
+    return true;
+  }
+
+  onProjectSave() {
+
+    if (!this.validateWDProjectToUpdate()) {
+      return;
+    }
+
+    var entityToUpdate={
+      name:this.wdProjectEntityToUpdate.name,
+      client:this.wdProjectEntityToUpdate.client,
+      status:this.wdProjectEntityToUpdate.status,
+      href:this.wdProjectEntityToUpdate.href
+    }
+
+    this.operationResult.inProgress = true
+    this._wdprojectService.update(this.model.id, entityToUpdate).subscribe(
+      response => {
+        this.operationResult = this._utilService.processGenericResponse(response);
+
+        if (!this.operationResult.error) {
+          this._alertService.showAlert(new Alert("general.message_action_success", "success"));
+          this.loadDataProject()
+        }
+        else {
+          this.loadDataCurrentProject()
+          this.modalRef.dismiss("close");
+          this._alertService.showAlert(new Alert(this.operationResult.message, "danger"));
+        }
+      },
+      httpError => {
+        this.loadDataCurrentProject()
+        this.operationResult = this._utilService.processHttpError(httpError);
+        this._alertService.showAlert(new Alert(this.operationResult.message, "danger"));
+      }
+    );
+  }
+
+  loadDataCurrentProject() {
+    this.wdProjectEntityToUpdate.name = this.wdProjectEntity.name
+    this.wdProjectEntityToUpdate.client = this.wdProjectEntity.client
+    this.wdProjectEntityToUpdate.href = this.wdProjectEntity.href
+    this.wdProjectEntityToUpdate.status = this.wdProjectEntity.status
+  }
+
+  loadDataProject() {
+    this.operationResult.inProgress = true;
+    this._wdprojectService.findById(this.model.id).subscribe(
+      response => {
+        this.operationResult = this._utilService.processGenericResponse(response);
+
+        if (!this.operationResult.error) {
+          this.title = this.operationResult.genericResponse.data.name
+          
+          this.wdProjectEntity.name = this.operationResult.genericResponse.data.name;
+          this.wdProjectEntity.client = this.operationResult.genericResponse.data.client;
+          this.wdProjectEntity.href = this.operationResult.genericResponse.data.href;
+          this.wdProjectEntity.status = this.operationResult.genericResponse.data.status;
+
+          
+          this.wdProjectEntityToUpdate.name = this.wdProjectEntity.name
+          this.wdProjectEntityToUpdate.client = this.wdProjectEntity.client
+          this.wdProjectEntityToUpdate.href = this.wdProjectEntity.href
+          this.wdProjectEntityToUpdate.status = this.wdProjectEntity.status
+        }
+        else {
+          this._alertService.showAlert(new Alert(this.operationResult.message, "danger"));
+          this.router.navigate(['/wdproject/index']);
+        }
+      },
+      httpError => {
+
+        this.operationResult = this._utilService.processHttpError(httpError);
+        this._alertService.showAlert(new Alert(this.operationResult.message, "danger"));
+        this.router.navigate(['/wdproject/index']);
+      }
+    );
   }
 
 }

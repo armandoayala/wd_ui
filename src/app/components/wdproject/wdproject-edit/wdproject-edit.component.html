@@ -13,19 +13,19 @@
         <div>
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item">
-                    <a [ngClass]="(executingAction('onNoteSave')==false)?'nav-link active':'nav-link active disabled'"
+                    <a class="nav-link active"
                         id="analisis-tab" data-toggle="tab" href="#analisis" role="tab" aria-controls="analisis"
-                        aria-selected="true">Analisis</a>
+                        aria-selected="true">{{ 'wdproject.edit_label_analisis' | translate }}</a>
                 </li>
                 <li class="nav-item">
-                    <a [ngClass]="(executingAction('onNoteSave')==false)?'nav-link':'nav-link disabled'" id="wddata-tab"
+                    <a class="nav-link" id="wddata-tab"
                         data-toggle="tab" href="#wddata" role="tab" aria-controls="wddata"
-                        aria-selected="false">WDData</a>
+                        aria-selected="false">{{ 'wdproject.edit_label_data' | translate }}</a>
                 </li>
                 <li class="nav-item">
-                    <a [ngClass]="(executingAction('onNoteSave')==false)?'nav-link':'nav-link disabled'"
-                        id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
-                        aria-selected="false">Contact</a>
+                    <a class="nav-link" id="project-tab"
+                        data-toggle="tab" href="#project" role="tab" aria-controls="project"
+                        aria-selected="false">{{ 'wdproject.edit_label_project' | translate }}</a>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
@@ -51,7 +51,24 @@
                 <div class="tab-pane fade" id="wddata" role="tabpanel" aria-labelledby="wddata-tab">
 
                     <div class="row mt-3">
-                        <div class="col-sm-6 col-md-6 col-lg-6"></div>
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 mb-3">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1"><i
+                                                    class="fas fa-search"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" [(ngModel)]="filtersearch"
+                                            placeholder="{{ 'general.label_search' | translate }}"
+                                            aria-describedby="basic-addon1">
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
                         <div class="col-sm-6 col-md-6 col-lg-6">
                             <div class="float-right">
                                 <button (click)="wdDataOpenCreatModal(CreateWDDataModal)"
@@ -83,7 +100,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr class="d-flex" *ngFor="let item of wdProjectEntity.wddata">
+                                        <tr class="d-flex"
+                                            *ngFor="let item of wdProjectEntity.wddata | searchgenericdata: filtersearch : 'name' ">
                                             <td class="col-3">
                                                 <span>{{item.name}}</span>
                                             </td>
@@ -115,7 +133,44 @@
                     </div>
 
                 </div>
-                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">EXTRA</div>
+                <div class="tab-pane fade" id="project" role="tabpanel" aria-labelledby="project-tab">
+                    <div class="row mt-3">
+                        <div class="col-sm-6 col-md-6 col-lg-6"></div>
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            <div class="float-right">
+                                <button (click)="onProjectSave()" type="button" class="btn btn-primary">
+                                    <i class="fas fa-save"></i>
+                                    {{ 'general.label_save' | translate }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <form [ngClass]="{'was-validated': wdProjectIsNotValidToUpdate==true}">
+                                <div class="form-group">
+                                    <label class="font-weight-bold" for="name">{{ 'general.label_name' | translate }}</label>
+                                    <input type="text" class="form-control" id="name" name="name" #name="ngModel"
+                                        [(ngModel)]="wdProjectEntityToUpdate.name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="client">{{ 'general.label_client' | translate }}</label>
+                                    <input type="text" class="form-control" id="client" name="client" #client="ngModel"
+                                        [(ngModel)]="wdProjectEntityToUpdate.client">
+                                </div>
+                                <div class="form-group">
+                                    <label for="href">{{ 'general.url' | translate }}</label>
+                                    <input type="text" class="form-control" id="href" name="href" #href="ngModel"
+                                        [(ngModel)]="wdProjectEntityToUpdate.href">
+                                </div>
+                                <div class="form-check">
+                                    <input [checked]="wdProjectEntityToUpdate.status=='ACTIVE'" (change)="onCheckboxIsActiveProject($event)" type="checkbox" class="form-check-input" id="exampleCheck1">
+                                    <label class="form-check-label" for="exampleCheck1">{{ 'wdproject.edit_label_active' | translate }}</label>
+                                  </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -157,7 +212,7 @@
             </div>
             <div class="form-group">
                 <label>
-                    <input type="checkbox" value="1" (change)="onCheckboxEncode($event)" />
+                    <input type="checkbox" value="2" (change)="onCheckboxEncode($event)" />
                     {{ 'general.label_encrypt' | translate }}
                 </label>
             </div>

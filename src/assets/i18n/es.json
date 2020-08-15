@@ -94,6 +94,10 @@
     "index_label_created": "Creado",
     "index_label_href": "Enlace externo",
     "index_label_unlink": "No posee enlace externo",
-    "edit_label_is_href": "¿Valor es link?"
+    "edit_label_is_href": "¿Valor es link?",
+    "edit_label_analisis": "Análisis",
+    "edit_label_data": "Datos",
+    "edit_label_project": "Proyecto",
+    "edit_label_active": "Activo"
   }
 }

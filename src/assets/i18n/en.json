@@ -94,6 +94,10 @@
     "index_label_created": "Created",
     "index_label_href": "External link",
     "index_label_unlink": "There is no external link",
-    "edit_label_is_href": "Value is link?"
+    "edit_label_is_href": "Value is link?",
+    "edit_label_analisis": "Analysis",
+    "edit_label_data": "Data",
+    "edit_label_project": "Project",
+    "edit_label_active": "Active"
   }
 }
