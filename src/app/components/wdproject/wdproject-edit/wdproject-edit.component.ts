@@ -316,9 +316,9 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
 
   onCheckboxIsActiveProject(e) {
     if (e.target.checked) {
-      this.wdProjectEntity.status = Status.ACTIVE;
+      this.wdProjectEntityToUpdate.status = Status.ACTIVE;
     } else {
-      this.wdProjectEntity.status = Status.INACTIVE;
+      this.wdProjectEntityToUpdate.status = Status.INACTIVE;
     }
   }
 
