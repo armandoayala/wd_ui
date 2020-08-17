@@ -43,7 +43,7 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
   public model = {
     id: null
   };
-  public filtersearch: String;
+  public filtersearch: string;
 
   private modalRef;
 
