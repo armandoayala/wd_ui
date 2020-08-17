@@ -30,6 +30,7 @@
     "express": "^4.17.1",
     "karma": "^5.1.1",
     "mkdirp": "^1.0.4",
+    "npm-force-resolutions": "0.0.3",
     "rxjs": "~6.4.0",
     "tslib": "^1.13.0",
     "zone.js": "~0.9.1"
@@ -59,5 +60,8 @@
   "engines": {
     "node": "10.16.3",
     "npm": "6.14.4"
+  },
+  "resolutions": {
+    "@babel/preset-env": "^7.8.7"
   }
 }
