@@ -44,8 +44,16 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
     id: null
   };
   public filtersearch: string;
+  public wdDecodeModel =
+    {
+      code: "",
+      tempCode: null,
+      isNotValid: false
+    };
 
+  private wdDataIsDecoded = false
   private modalRef;
+  private modalDecodeRef;
 
   constructor(private translate: TranslateService,
     private _userService: UserService,
@@ -104,6 +112,7 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
     }
   }
 
+
   loadData() {
     this.operationResult.inProgress = true;
     this._wdprojectService.findById(this.model.id).subscribe(
@@ -149,6 +158,7 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
 
 
   onReload() {
+    this.wdDataEncodeValues()
     this.loadData()
   }
 
@@ -197,7 +207,7 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
         if (!this.operationResult.error) {
           this._alertService.showAlert(new Alert("general.message_action_success", "success"));
 
-          this.loadData();
+          this.reloadWDData();
         }
         else {
           this._alertService.showAlert(new Alert(this.operationResult.message, "danger"));
@@ -274,7 +284,7 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
           this.modalRef.close(this.wdDataAddEntity);
           this._alertService.showAlert(new Alert("general.message_action_success", "success"));
 
-          this.loadData()
+          this.reloadWDData()
         }
         else {
           this.modalRef.dismiss("close");
@@ -314,6 +324,75 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
     this.wdDataAddEntity.isNotValid = false;
   }
 
+  wdDataOpenDecodeModal(content) {
+
+    this.modalDecodeRef = this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
+
+    this.modalDecodeRef.result.then((result) => {
+      this.wdDataCleanEntityToDecode();
+    }, (reason) => {
+      this.wdDataCleanEntityToDecode();
+    });
+
+  }
+
+  wdDataCloseDecodeModel(reason) {
+    if (reason === "ACCEPT" && this.wdDataValidatDecode()) {
+      this.wdDataDecode();
+    }
+
+    if (reason === "CLOSE") {
+      this.modalDecodeRef.dismiss("close");
+    }
+  }
+
+  wdDataDecode() {
+    this.operationResult.inProgress = true;
+
+    this._wdprojectService.decodeWDData(this.model.id, { code: this.wdDecodeModel.code }).subscribe(
+      response => {
+        this.operationResult = this._utilService.processGenericResponse(response);
+
+        if (!this.operationResult.error) {
+          this.modalDecodeRef.close(this.wdDecodeModel);
+          this._alertService.showAlert(new Alert("general.message_action_success", "success"));
+          this.wdProjectEntity.wddata = this.operationResult.genericResponse.data;
+          this.wdDataIsDecoded = true
+          this.wdDecodeModel.tempCode = this.wdDecodeModel.code
+        }
+        else {
+          this.modalDecodeRef.dismiss("close");
+          this._alertService.showAlert(new Alert(this.operationResult.message, "danger"));
+        }
+      },
+      httpError => {
+        this.operationResult = this._utilService.processHttpError(httpError);
+        this.modalDecodeRef.dismiss("close");
+        this._alertService.showAlert(new Alert(this.operationResult.message, "danger"));
+      }
+    );
+  }
+
+  wdDataEncodeValues() {
+    this.wdDataIsDecoded = false
+    this.wdDecodeModel.tempCode = null
+  }
+
+  wdDataValidatDecode() {
+    if (!this.wdDecodeModel.code || this.wdDecodeModel.code.length == 0) {
+      this.wdDecodeModel.isNotValid = true;
+      return false;
+    }
+
+    this.wdDecodeModel.isNotValid = false;
+    return true;
+  }
+
+  wdDataCleanEntityToDecode() {
+    this.wdDecodeModel.code = "";
+    this.wdDecodeModel.isNotValid = false;
+  }
+
   onCheckboxIsActiveProject(e) {
     if (e.target.checked) {
       this.wdProjectEntityToUpdate.status = Status.ACTIVE;
@@ -338,11 +417,11 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    var entityToUpdate={
-      name:this.wdProjectEntityToUpdate.name,
-      client:this.wdProjectEntityToUpdate.client,
-      status:this.wdProjectEntityToUpdate.status,
-      href:this.wdProjectEntityToUpdate.href
+    var entityToUpdate = {
+      name: this.wdProjectEntityToUpdate.name,
+      client: this.wdProjectEntityToUpdate.client,
+      status: this.wdProjectEntityToUpdate.status,
+      href: this.wdProjectEntityToUpdate.href
     }
 
     this.operationResult.inProgress = true
@@ -383,13 +462,13 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
 
         if (!this.operationResult.error) {
           this.title = this.operationResult.genericResponse.data.name
-          
+
           this.wdProjectEntity.name = this.operationResult.genericResponse.data.name;
           this.wdProjectEntity.client = this.operationResult.genericResponse.data.client;
           this.wdProjectEntity.href = this.operationResult.genericResponse.data.href;
           this.wdProjectEntity.status = this.operationResult.genericResponse.data.status;
 
-          
+
           this.wdProjectEntityToUpdate.name = this.wdProjectEntity.name
           this.wdProjectEntityToUpdate.client = this.wdProjectEntity.client
           this.wdProjectEntityToUpdate.href = this.wdProjectEntity.href
@@ -407,6 +486,66 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
         this.router.navigate(['/wdproject/index']);
       }
     );
+  }
+
+  reloadWDData() {
+    if (this.wdDataIsDecoded && this.wdDecodeModel.tempCode) {
+      this.reloadDecodedWDData()
+    }
+    else {
+      this.wdDataEncodeValues()
+      this.reloadEncodedWDData()
+    }
+  }
+
+  reloadDecodedWDData() {
+    this.operationResult.inProgress = true;
+    this._wdprojectService.decodeWDData(this.model.id, { code: this.wdDecodeModel.tempCode }).subscribe(
+      response => {
+        this.operationResult = this._utilService.processGenericResponse(response);
+
+        if (!this.operationResult.error) {
+          this.wdProjectEntity.wddata = this.operationResult.genericResponse.data;
+        }
+        else {
+          this._alertService.showAlert(new Alert(this.operationResult.message, "danger"));
+        }
+      },
+      httpError => {
+        this.operationResult = this._utilService.processHttpError(httpError);
+        this._alertService.showAlert(new Alert(this.operationResult.message, "danger"));
+      }
+    );
+  }
+
+  reloadEncodedWDData() {
+    this.operationResult.inProgress = true;
+    this._wdprojectService.findById(this.model.id).subscribe(
+      response => {
+        this.operationResult = this._utilService.processGenericResponse(response);
+
+        if (!this.operationResult.error) {
+          this.wdProjectEntity.wddata = this.operationResult.genericResponse.data.wddata;
+        }
+        else {
+          this._alertService.showAlert(new Alert(this.operationResult.message, "danger"));
+        }
+      },
+      httpError => {
+
+        this.operationResult = this._utilService.processHttpError(httpError);
+        this._alertService.showAlert(new Alert(this.operationResult.message, "danger"));
+      }
+    );
+  }
+
+  existsEncodedWDData() {
+    if (this.wdProjectEntity.wddata && this.wdProjectEntity.wddata.length > 0) {
+      let resultFiltered = this.wdProjectEntity.wddata.filter(x => x.encode == true)
+      return (resultFiltered && resultFiltered.length > 0)
+    }
+
+    return false
   }
 
 }

@@ -98,6 +98,10 @@
     "edit_label_analisis": "Analysis",
     "edit_label_data": "Data",
     "edit_label_project": "Project",
-    "edit_label_active": "Active"
+    "edit_label_active": "Active",
+    "edit_label_decode":"Decrypt",
+    "edit_label_password":"Password",
+    "edit_label_wddata_encoded":"Encrypted value",
+    "edit_label_encode":"Encrypt"
   }
 }

@@ -59,4 +59,8 @@ export class WdprojectService {
     return this._http.post<GenericResponse>(this.url + 'wdproject/delete-wddata/' + id, data, this._apiService.postRequestOptions());
   }
 
+  decodeWDData(id: string, entity: any): Observable<GenericResponse> {
+    return this._http.post<GenericResponse>(this.url + 'wdproject/decode-wddata/' + id, entity, this._apiService.postRequestOptions());
+  }
+
 }

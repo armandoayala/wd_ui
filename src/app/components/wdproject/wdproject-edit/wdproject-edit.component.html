@@ -13,42 +13,22 @@
         <div>
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active"
-                        id="analisis-tab" data-toggle="tab" href="#analisis" role="tab" aria-controls="analisis"
+                    <a class="nav-link active" id="wddata-tab" data-toggle="tab" href="#wddata" role="tab"
+                        aria-controls="wddata" aria-selected="false">{{ 'wdproject.edit_label_data' | translate }}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="analisis-tab" data-toggle="tab" href="#analisis" role="tab"
+                        aria-controls="analisis"
                         aria-selected="true">{{ 'wdproject.edit_label_analisis' | translate }}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="wddata-tab"
-                        data-toggle="tab" href="#wddata" role="tab" aria-controls="wddata"
-                        aria-selected="false">{{ 'wdproject.edit_label_data' | translate }}</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="project-tab"
-                        data-toggle="tab" href="#project" role="tab" aria-controls="project"
+                    <a class="nav-link" id="project-tab" data-toggle="tab" href="#project" role="tab"
+                        aria-controls="project"
                         aria-selected="false">{{ 'wdproject.edit_label_project' | translate }}</a>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="analisis" role="tabpanel" aria-labelledby="analisis-tab">
-                    <div class="row mt-3">
-                        <div class="col-sm-6 col-md-6 col-lg-6"></div>
-                        <div class="col-sm-6 col-md-6 col-lg-6">
-                            <div class="float-right">
-                                <button (click)="onNoteSave()" [disabled]="executingAction('onNoteSave')" type="button"
-                                    class="btn btn-primary">
-                                    <i class="fas fa-save"></i>
-                                    {{ 'general.label_save' | translate }}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-sm-12 col-md-12 col-lg-12">
-                            <ckeditor id="editor" #editor [editor]="Editor"></ckeditor>
-                        </div>
-                    </div>
-                </div>
-                <div class="tab-pane fade" id="wddata" role="tabpanel" aria-labelledby="wddata-tab">
+                <div class="tab-pane fade show active" id="wddata" role="tabpanel" aria-labelledby="wddata-tab">
 
                     <div class="row mt-3">
                         <div class="col-sm-6 col-md-6 col-lg-6">
@@ -70,13 +50,31 @@
 
                         </div>
                         <div class="col-sm-6 col-md-6 col-lg-6">
-                            <div class="float-right">
+
+
+                            <div class="float-right ml-3">
                                 <button (click)="wdDataOpenCreatModal(CreateWDDataModal)"
                                     [disabled]="executingAction('onWDDataAdd')" type="button" class="btn btn-primary">
                                     <i class="fas fa-plus-circle"></i>
                                     {{ 'general.label_add' | translate }}
                                 </button>
                             </div>
+                            <div *ngIf="!wdDataIsDecoded && existsEncodedWDData()" class="float-right">
+                                <button (click)="wdDataOpenDecodeModal(DecodeWDDataModal)"
+                                    [disabled]="executingAction('onWDDataAdd')" type="button" class="btn btn-primary">
+                                    <i class="fas fa-lock"></i>
+                                    {{ 'wdproject.edit_label_decode' | translate }}
+                                </button>
+                            </div>
+                            <div *ngIf="wdDataIsDecoded && existsEncodedWDData()" class="float-right">
+                                <button (click)="wdDataEncodeValues()" [disabled]="executingAction('onWDDataAdd')"
+                                    type="button" class="btn btn-danger">
+                                    <i class="fas fa-lock-open"></i>
+                                    {{ 'wdproject.edit_label_encode' | translate }}
+                                </button>
+                            </div>
+
+
                         </div>
                     </div>
                     <div class="row mt-3">
@@ -106,10 +104,16 @@
                                                 <span>{{item.name}}</span>
                                             </td>
                                             <td class="col-8">
-                                                <p *ngIf="!item.isHref">{{item.value}}</p>
-                                                <div *ngIf="item.isHref">
-                                                    <button (click)="openExternalLink(item.value)" type="button"
-                                                        class="btn btn-link">{{item.value}}</button>
+                                                <div *ngIf="item.encode && !wdDataIsDecoded">
+                                                    <p class="text-danger"><i class="fas fa-lock"></i>
+                                                        {{ 'wdproject.edit_label_wddata_encoded' | translate }} </p>
+                                                </div>
+                                                <div *ngIf="!item.encode || wdDataIsDecoded">
+                                                    <p *ngIf="!item.isHref">{{item.value}}</p>
+                                                    <div *ngIf="item.isHref">
+                                                        <button (click)="openExternalLink(item.value)" type="button"
+                                                            class="btn btn-link">{{item.value}}</button>
+                                                    </div>
                                                 </div>
                                             </td>
                                             <td class="col-1">
@@ -133,6 +137,27 @@
                     </div>
 
                 </div>
+
+                <div class="tab-pane fade" id="analisis" role="tabpanel" aria-labelledby="analisis-tab">
+                    <div class="row mt-3">
+                        <div class="col-sm-6 col-md-6 col-lg-6"></div>
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            <div class="float-right">
+                                <button (click)="onNoteSave()" [disabled]="executingAction('onNoteSave')" type="button"
+                                    class="btn btn-primary">
+                                    <i class="fas fa-save"></i>
+                                    {{ 'general.label_save' | translate }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <ckeditor id="editor" #editor [editor]="Editor"></ckeditor>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="tab-pane fade" id="project" role="tabpanel" aria-labelledby="project-tab">
                     <div class="row mt-3">
                         <div class="col-sm-6 col-md-6 col-lg-6"></div>
@@ -149,7 +174,8 @@
                         <div class="col-sm-12 col-md-12 col-lg-12">
                             <form [ngClass]="{'was-validated': wdProjectIsNotValidToUpdate==true}">
                                 <div class="form-group">
-                                    <label class="font-weight-bold" for="name">{{ 'general.label_name' | translate }}</label>
+                                    <label class="font-weight-bold"
+                                        for="name">{{ 'general.label_name' | translate }}</label>
                                     <input type="text" class="form-control" id="name" name="name" #name="ngModel"
                                         [(ngModel)]="wdProjectEntityToUpdate.name" required>
                                 </div>
@@ -164,9 +190,12 @@
                                         [(ngModel)]="wdProjectEntityToUpdate.href">
                                 </div>
                                 <div class="form-check">
-                                    <input [checked]="wdProjectEntityToUpdate.status=='ACTIVE'" (change)="onCheckboxIsActiveProject($event)" type="checkbox" class="form-check-input" id="exampleCheck1">
-                                    <label class="form-check-label" for="exampleCheck1">{{ 'wdproject.edit_label_active' | translate }}</label>
-                                  </div>
+                                    <input [checked]="wdProjectEntityToUpdate.status=='ACTIVE'"
+                                        (change)="onCheckboxIsActiveProject($event)" type="checkbox"
+                                        class="form-check-input" id="exampleCheck1">
+                                    <label class="form-check-label"
+                                        for="exampleCheck1">{{ 'wdproject.edit_label_active' | translate }}</label>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -204,12 +233,12 @@
                 <input type="text" class="form-control" id="url" name="url" #url="ngModel"
                     [(ngModel)]="wdDataAddEntity.url">
             </div>
-            <div class="form-group">
+            <!--<div class="form-group">
                 <label>
                     <input type="checkbox" value="1" (change)="onCheckboxIsHref($event)" />
                     {{ 'wdproject.edit_label_is_href' | translate }}
                 </label>
-            </div>
+            </div>-->
             <div class="form-group">
                 <label>
                     <input type="checkbox" value="2" (change)="onCheckboxEncode($event)" />
@@ -223,5 +252,29 @@
             (click)="wdDataCloseCreateModel('CLOSE')">{{ 'general.label_cancel' | translate }}</button>
         <button type="button" class="btn btn-primary"
             (click)="wdDataCloseCreateModel('SAVE')">{{ 'general.label_save' | translate }}</button>
+    </div>
+</ng-template>
+
+<ng-template #DecodeWDDataModal let-modal>
+    <div class="modal-header bg-primary text-white">
+        <h4 class="modal-title" id="modal-basic-title">{{ 'wdproject.edit_label_decode' | translate }}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="wdDataCloseDecodeModel('CLOSE')">
+            <span class="text-white" aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [ngClass]="{'was-validated': wdDecodeModel.isNotValid==true}">
+            <div class="form-group">
+                <label class="font-weight-bold" for="code">{{ 'wdproject.edit_label_password' | translate }}</label>
+                <input type="password" class="form-control" id="code" name="code" #code="ngModel"
+                    [(ngModel)]="wdDecodeModel.code" required>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary"
+            (click)="wdDataCloseDecodeModel('CLOSE')">{{ 'general.label_cancel' | translate }}</button>
+        <button type="button" class="btn btn-primary"
+            (click)="wdDataCloseDecodeModel('ACCEPT')">{{ 'general.label_accept' | translate }}</button>
     </div>
 </ng-template>
