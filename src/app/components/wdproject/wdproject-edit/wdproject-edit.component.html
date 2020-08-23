@@ -109,9 +109,9 @@
                                                         {{ 'wdproject.edit_label_wddata_encoded' | translate }} </p>
                                                 </div>
                                                 <div *ngIf="!item.encode || wdDataIsDecoded">
-                                                    <p *ngIf="!item.isHref">{{item.value}}</p>
+                                                    <p *ngIf="!item.isHref"><i *ngIf="item.encode" class="fas fa-lock-open"></i> {{item.value}}</p>
                                                     <div *ngIf="item.isHref">
-                                                        <button (click)="openExternalLink(item.value)" type="button"
+                                                        <i *ngIf="item.encode" class="fas fa-lock-open"></i> <button (click)="openExternalLink(item.value)" type="button"
                                                             class="btn btn-link">{{item.value}}</button>
                                                     </div>
                                                 </div>
