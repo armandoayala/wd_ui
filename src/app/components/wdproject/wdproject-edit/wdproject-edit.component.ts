@@ -51,7 +51,7 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
       isNotValid: false
     };
 
-  private wdDataIsDecoded = false
+  public wdDataIsDecoded = false
   private modalRef;
   private modalDecodeRef;
 
