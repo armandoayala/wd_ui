@@ -234,7 +234,7 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
 
         if (!this.operationResult.error) {
           this._alertService.showAlert(new Alert("general.message_action_success", "success"));
-          this.wdProjectEntity = this.operationResult.genericResponse.data;
+          this.wdProjectEntity.note = this.operationResult.genericResponse.data.note;
         }
         else {
           this._alertService.showAlert(new Alert(this.operationResult.message, "danger"));
