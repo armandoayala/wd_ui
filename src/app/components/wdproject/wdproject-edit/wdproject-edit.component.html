@@ -18,13 +18,13 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="analisis-tab" data-toggle="tab" href="#analisis" role="tab"
-                        aria-controls="analisis"
-                        aria-selected="true">{{ 'wdproject.edit_label_analisis' | translate }}</a>
+                        aria-controls="analisis" aria-selected="true">{{ 'wdproject.edit_label_analisis' | translate
+                        }}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="project-tab" data-toggle="tab" href="#project" role="tab"
-                        aria-controls="project"
-                        aria-selected="false">{{ 'wdproject.edit_label_project' | translate }}</a>
+                        aria-controls="project" aria-selected="false">{{ 'wdproject.edit_label_project' | translate
+                        }}</a>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
@@ -109,9 +109,11 @@
                                                         {{ 'wdproject.edit_label_wddata_encoded' | translate }} </p>
                                                 </div>
                                                 <div *ngIf="!item.encode || wdDataIsDecoded">
-                                                    <p *ngIf="!item.isHref"><i *ngIf="item.encode" class="fas fa-lock-open"></i> {{item.value}}</p>
+                                                    <p *ngIf="!item.isHref"><i *ngIf="item.encode"
+                                                            class="fas fa-lock-open"></i> {{item.value}}</p>
                                                     <div *ngIf="item.isHref">
-                                                        <i *ngIf="item.encode" class="fas fa-lock-open"></i> <button (click)="openExternalLink(item.value)" type="button"
+                                                        <i *ngIf="item.encode" class="fas fa-lock-open"></i> <button
+                                                            (click)="openExternalLink(item.value)" type="button"
                                                             class="btn btn-link">{{item.value}}</button>
                                                     </div>
                                                 </div>
@@ -153,7 +155,12 @@
                     </div>
                     <div class="row mt-3">
                         <div class="col-sm-12 col-md-12 col-lg-12">
-                            <ckeditor id="editor" #editor [editor]="Editor"></ckeditor>
+
+                            <div class="form-group">
+                                <textarea [(ngModel)]="wdProjectNote" class="form-control rounded-0" id="wdProjectNote"
+                                    rows="20" cols="155"></textarea>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -174,8 +181,8 @@
                         <div class="col-sm-12 col-md-12 col-lg-12">
                             <form [ngClass]="{'was-validated': wdProjectIsNotValidToUpdate==true}">
                                 <div class="form-group">
-                                    <label class="font-weight-bold"
-                                        for="name">{{ 'general.label_name' | translate }}</label>
+                                    <label class="font-weight-bold" for="name">{{ 'general.label_name' | translate
+                                        }}</label>
                                     <input type="text" class="form-control" id="name" name="name" #name="ngModel"
                                         [(ngModel)]="wdProjectEntityToUpdate.name" required>
                                 </div>
@@ -193,8 +200,8 @@
                                     <input [checked]="wdProjectEntityToUpdate.status=='ACTIVE'"
                                         (change)="onCheckboxIsActiveProject($event)" type="checkbox"
                                         class="form-check-input" id="exampleCheck1">
-                                    <label class="form-check-label"
-                                        for="exampleCheck1">{{ 'wdproject.edit_label_active' | translate }}</label>
+                                    <label class="form-check-label" for="exampleCheck1">{{ 'wdproject.edit_label_active'
+                                        | translate }}</label>
                                 </div>
                             </form>
                         </div>
@@ -248,10 +255,10 @@
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-secondary"
-            (click)="wdDataCloseCreateModel('CLOSE')">{{ 'general.label_cancel' | translate }}</button>
-        <button type="button" class="btn btn-primary"
-            (click)="wdDataCloseCreateModel('SAVE')">{{ 'general.label_save' | translate }}</button>
+        <button type="button" class="btn btn-secondary" (click)="wdDataCloseCreateModel('CLOSE')">{{
+            'general.label_cancel' | translate }}</button>
+        <button type="button" class="btn btn-primary" (click)="wdDataCloseCreateModel('SAVE')">{{ 'general.label_save' |
+            translate }}</button>
     </div>
 </ng-template>
 
@@ -272,9 +279,9 @@
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-secondary"
-            (click)="wdDataCloseDecodeModel('CLOSE')">{{ 'general.label_cancel' | translate }}</button>
-        <button type="button" class="btn btn-primary"
-            (click)="wdDataCloseDecodeModel('ACCEPT')">{{ 'general.label_accept' | translate }}</button>
+        <button type="button" class="btn btn-secondary" (click)="wdDataCloseDecodeModel('CLOSE')">{{
+            'general.label_cancel' | translate }}</button>
+        <button type="button" class="btn btn-primary" (click)="wdDataCloseDecodeModel('ACCEPT')">{{
+            'general.label_accept' | translate }}</button>
     </div>
 </ng-template>
