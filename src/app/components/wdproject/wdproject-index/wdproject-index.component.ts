@@ -1,47 +1,51 @@
-import { Component, OnInit } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit } from "@angular/core";
+import { TranslateService } from "@ngx-translate/core";
+import { NgbModal, ModalDismissReasons } from "@ng-bootstrap/ng-bootstrap";
+import { Router, ActivatedRoute } from "@angular/router";
 
 //Services
-import { UserService } from '../../../services/user.service';
-import { AlertService } from '../../../services/alert.service';
-import { UtilService } from '../../../services/util.service';
-import { WdprojectService } from '../../../services/wdproject.service';
-import { ConfirmationdialogService } from '../../../support/services/confirmationdialog.service';
-import { CONSTANT } from '../../../services/constant';
+import { UserService } from "../../../services/user.service";
+import { AlertService } from "../../../services/alert.service";
+import { UtilService } from "../../../services/util.service";
+import { WdprojectService } from "../../../services/wdproject.service";
+import { ConfirmationdialogService } from "../../../support/services/confirmationdialog.service";
+import { CONSTANT } from "../../../services/constant";
 
 //Models
-import { PageFilter, QueryFilter, GenericFilter } from '../../../models/generic-filter';
-import { GenericResponse } from '../../../models/genericresponse';
-import { OperationResult } from '../../../models/operationresult';
-import { WDProject, WDData } from '../../../models/wdproject';
-import { Alert } from '../../../models/ui/alertui';
-import { WDProjectCreate } from '../../../models/ui/wdprojectcreate';
-import { IndexModel } from '../../../models/ui/index-model';
-import { Status } from '../../../models/status';
-import { ConfirmationdialogModel } from '../../../support/models/ConfirmationdialogModel';
+import {
+  PageFilter,
+  QueryFilter,
+  GenericFilter,
+} from "../../../models/generic-filter";
+import { GenericResponse } from "../../../models/genericresponse";
+import { OperationResult } from "../../../models/operationresult";
+import { WDProject, WDData } from "../../../models/wdproject";
+import { Alert } from "../../../models/ui/alertui";
+import { WDProjectCreate } from "../../../models/ui/wdprojectcreate";
+import { IndexModel } from "../../../models/ui/index-model";
+import { Status } from "../../../models/status";
+import { ConfirmationdialogModel } from "../../../support/models/ConfirmationdialogModel";
 
 @Component({
-  selector: 'app-wdproject-index',
-  templateUrl: './wdproject-index.component.html',
-  styleUrls: ['./wdproject-index.component.css']
+  selector: "app-wdproject-index",
+  templateUrl: "./wdproject-index.component.html",
+  styleUrls: ["./wdproject-index.component.css"],
 })
 export class WdprojectIndexComponent implements OnInit {
+  public title: string;
+  public indexModel: IndexModel<WDProject> = new IndexModel();
 
-  public title: string
-  public indexModel: IndexModel<WDProject> = new IndexModel()
+  public genericResponse: GenericResponse;
+  public operationResult: OperationResult;
+  public queryFilter: QueryFilter;
+  public filter: GenericFilter;
+  public pageFilter: PageFilter;
 
-  public genericResponse: GenericResponse
-  public operationResult: OperationResult
-  public queryFilter: QueryFilter
-  public filter: GenericFilter
-  public pageFilter: PageFilter
+  private modalRef;
+  public entityToCreate: WDProjectCreate;
 
-  private modalRef
-  public entityToCreate: WDProjectCreate
-
-  constructor(private translate: TranslateService,
+  constructor(
+    private translate: TranslateService,
     private _userService: UserService,
     private _wdprojectService: WdprojectService,
     private _alertService: AlertService,
@@ -49,14 +53,15 @@ export class WdprojectIndexComponent implements OnInit {
     private _confirmationdialogService: ConfirmationdialogService,
     private modalService: NgbModal,
     private route: ActivatedRoute,
-    private router: Router) {
+    private router: Router
+  ) {
     this.title = "page.title_wd_project";
     //this.queryFilter = { status: Status.ACTIVE, query: null, extras: [{ "field_n": "value_filter"}] }
-    this.queryFilter = { status: Status.ACTIVE, query: null, extras: [] }
-    this.filter = new GenericFilter(this.queryFilter, { name: "asc" })
+    this.queryFilter = { status: Status.ACTIVE, query: null, extras: [] };
+    this.filter = new GenericFilter(this.queryFilter, { name: "asc" });
     this.operationResult = new OperationResult(null, "", false);
     this.entityToCreate = new WDProjectCreate("", "", "", false);
-    this.pageFilter = new PageFilter(0, CONSTANT.page_limit)
+    this.pageFilter = new PageFilter(0, CONSTANT.page_limit);
   }
 
   ngOnInit(): void {
@@ -66,24 +71,24 @@ export class WdprojectIndexComponent implements OnInit {
 
   loadWDProjects() {
     this.operationResult.inProgress = true;
-    this._wdprojectService.findAll(this.filter, this.pageFilter.page, this.pageFilter.limit).subscribe(
-      response => {
-        this.operationResult = this._utilService.processGenericResponse(response);
+    this._wdprojectService
+      .findAll(this.filter, this.pageFilter.page, this.pageFilter.limit)
+      .subscribe(
+        (response) => {
+          this.operationResult = this._utilService.processGenericResponse(
+            response
+          );
 
-        if (!this.operationResult.error) {
-          this.indexModel.result = this.operationResult.genericResponse.data.result;
-          this.indexModel.hasMore = this.operationResult.genericResponse.data.hasMore;
-          this.indexModel.count = this.operationResult.genericResponse.data.count;
+          if (!this.operationResult.error) {
+            this.indexModel.result = this.operationResult.genericResponse.data.result;
+            this.indexModel.hasMore = this.operationResult.genericResponse.data.hasMore;
+            this.indexModel.count = this.operationResult.genericResponse.data.count;
+          }
+        },
+        (httpError) => {
+          this._utilService.processHttpError(httpError, null);
         }
-
-      },
-      httpError => {
-
-        this.operationResult = this._utilService.processHttpError(httpError);
-        this._alertService.showAlert(new Alert(this.operationResult.message, "danger"));
-      }
-    );
-
+      );
   }
 
   reloadResults() {
@@ -97,17 +102,17 @@ export class WdprojectIndexComponent implements OnInit {
   }
 
   onSelectedPageEvent(event) {
-    this.pageFilter.page=event.page 
-    this.reloadResults()
+    this.pageFilter.page = event.page;
+    this.reloadResults();
   }
 
   showSection(name: string): Boolean {
     switch (name) {
-      case 'not_found_results':
-        return !this.indexModel.result || this.indexModel.result.length == 0
-      case 'results':
+      case "not_found_results":
+        return !this.indexModel.result || this.indexModel.result.length == 0;
+      case "results":
         return this.indexModel.result && this.indexModel.result.length > 0;
-      case 'loading':
+      case "loading":
         return this.operationResult.inProgress;
       default:
         return false;
@@ -122,44 +127,54 @@ export class WdprojectIndexComponent implements OnInit {
   }
 
   openCreateModal(content) {
-
-    this.modalRef = this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
-
-    this.modalRef.result.then((result) => {
-      this.cleanEntityToCreate();
-    }, (reason) => {
-      this.cleanEntityToCreate();
+    this.modalRef = this.modalService.open(content, {
+      ariaLabelledBy: "modal-basic-title",
     });
 
+    this.modalRef.result.then(
+      (result) => {
+        this.cleanEntityToCreate();
+      },
+      (reason) => {
+        this.cleanEntityToCreate();
+      }
+    );
   }
 
   saveEntityToCreate() {
-    var wdProjectToSave = WDProject.instanceToSave(this.entityToCreate.name,
-      this.entityToCreate.href, this.entityToCreate.client);
+    var wdProjectToSave = WDProject.instanceToSave(
+      this.entityToCreate.name,
+      this.entityToCreate.href,
+      this.entityToCreate.client
+    );
 
-      this.operationResult.inProgress = true;
+    this.operationResult.inProgress = true;
     this._wdprojectService.create(wdProjectToSave).subscribe(
-      response => {
-        this.operationResult = this._utilService.processGenericResponse(response);
+      (response) => {
+        this.operationResult = this._utilService.processGenericResponse(
+          response
+        );
 
         if (!this.operationResult.error) {
           this.modalRef.close(this.entityToCreate);
-          this._alertService.showAlert(new Alert("general.message_action_success", "success"));
+          this._alertService.showAlert(
+            new Alert("general.message_action_success", "success")
+          );
 
-          this.loadWDProjects()
-        }
-        else {
+          this.loadWDProjects();
+        } else {
           this.modalRef.dismiss("close");
-          this._alertService.showAlert(new Alert(this.operationResult.message, "danger"));
+          this._alertService.showAlert(
+            new Alert(this.operationResult.message, "danger")
+          );
         }
       },
-      httpError => {
-        this.operationResult = this._utilService.processHttpError(httpError);
-        this.modalRef.dismiss("close");
-        this._alertService.showAlert(new Alert(this.operationResult.message, "danger"));
+      (httpError) => {
+        this._utilService.processHttpError(httpError, (data) => {
+          this.modalRef.dismiss("close");
+        });
       }
     );
-
   }
 
   closeCreateModel(reason) {
@@ -189,87 +204,94 @@ export class WdprojectIndexComponent implements OnInit {
   }
 
   openConfirmationDialog(itemId: string, operation: string) {
-    this._confirmationdialogService.confirm(ConfirmationdialogModel.defaultDialog())
+    this._confirmationdialogService
+      .confirm(ConfirmationdialogModel.defaultDialog())
       .then((confirmed) => {
         if (confirmed == true) {
-          if (operation == 'DELETE') {
+          if (operation == "DELETE") {
             this.deleteItem(itemId);
-          }
-          else if (operation == 'ACTIVATE') {
+          } else if (operation == "ACTIVATE") {
             this.activateItem(itemId);
-          }
-          else if (operation == 'INACTIVATE') {
+          } else if (operation == "INACTIVATE") {
             this.inactivateItem(itemId);
           }
         }
       })
-      .catch(() => { });
+      .catch(() => {});
   }
 
   private deleteItem(itemId: string) {
     this._wdprojectService.delete(itemId).subscribe(
-      response => {
-        this.operationResult = this._utilService.processGenericResponse(response);
+      (response) => {
+        this.operationResult = this._utilService.processGenericResponse(
+          response
+        );
 
         if (!this.operationResult.error) {
-          this._alertService.showAlert(new Alert("general.message_action_success", "success"));
+          this._alertService.showAlert(
+            new Alert("general.message_action_success", "success")
+          );
 
           this.loadWDProjects();
-        }
-        else {
-          this._alertService.showAlert(new Alert(this.operationResult.message, "danger"));
+        } else {
+          this._alertService.showAlert(
+            new Alert(this.operationResult.message, "danger")
+          );
         }
       },
-      httpError => {
-        this.operationResult = this._utilService.processHttpError(httpError);
-        this._alertService.showAlert(new Alert(this.operationResult.message, "danger"));
+      (httpError) => {
+        this._utilService.processHttpError(httpError, null);
       }
     );
-
   }
 
   private activateItem(itemId: string) {
     this._wdprojectService.activate(itemId).subscribe(
-      response => {
-        this.operationResult = this._utilService.processGenericResponse(response);
+      (response) => {
+        this.operationResult = this._utilService.processGenericResponse(
+          response
+        );
 
         if (!this.operationResult.error) {
-          this._alertService.showAlert(new Alert("general.message_action_success", "success"));
+          this._alertService.showAlert(
+            new Alert("general.message_action_success", "success")
+          );
 
           this.loadWDProjects();
-        }
-        else {
-          this._alertService.showAlert(new Alert(this.operationResult.message, "danger"));
+        } else {
+          this._alertService.showAlert(
+            new Alert(this.operationResult.message, "danger")
+          );
         }
       },
-      httpError => {
-        this.operationResult = this._utilService.processHttpError(httpError);
-        this._alertService.showAlert(new Alert(this.operationResult.message, "danger"));
+      (httpError) => {
+        this._utilService.processHttpError(httpError, null);
       }
     );
-
   }
 
   private inactivateItem(itemId: string) {
     this._wdprojectService.inactivate(itemId).subscribe(
-      response => {
-        this.operationResult = this._utilService.processGenericResponse(response);
+      (response) => {
+        this.operationResult = this._utilService.processGenericResponse(
+          response
+        );
 
         if (!this.operationResult.error) {
-          this._alertService.showAlert(new Alert("general.message_action_success", "success"));
+          this._alertService.showAlert(
+            new Alert("general.message_action_success", "success")
+          );
 
           this.loadWDProjects();
-        }
-        else {
-          this._alertService.showAlert(new Alert(this.operationResult.message, "danger"));
+        } else {
+          this._alertService.showAlert(
+            new Alert(this.operationResult.message, "danger")
+          );
         }
       },
-      httpError => {
-        this.operationResult = this._utilService.processHttpError(httpError);
-        this._alertService.showAlert(new Alert(this.operationResult.message, "danger"));
+      (httpError) => {
+        this._utilService.processHttpError(httpError, null);
       }
     );
-
   }
-
 }

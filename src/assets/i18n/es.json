@@ -32,7 +32,12 @@
     "label_add": "Agregar",
     "label_value": "Valor",
     "label_encode": "Codificar",
-    "label_encrypt": "Encriptar"
+    "label_encrypt": "Encriptar",
+    "label_edit": "Editar",
+    "label_previous": "Anterior",
+    "label_next": "Siguiente",
+    "label_copy": "Copiar",
+    "label_message": "Mensaje"
   },
   "home": {
     "label_create_accesslink": "Crear link de acceso",
@@ -46,7 +51,8 @@
     "error_required_password": "El password es obligatorio",
     "label_help_password": "Nunca comparta su password con nadie más.",
     "label_forgot_password": "Olvidó su password?",
-    "label_create_account": "Crear una cuenta!"
+    "label_create_account": "Crear una cuenta!",
+    "message_session_out": "La sesión ha expirado, por favor vuelva a realizar el inicio de sesión."
   },
   "createuser": {
     "title_form": "Crear usuario",
@@ -102,6 +108,8 @@
     "edit_label_decode":"Desencriptar",
     "edit_label_password":"Password",
     "edit_label_wddata_encoded":"Valor encriptado",
-    "edit_label_encode":"Encriptar"
+    "edit_label_encode":"Encriptar",
+    "edit_label_encode_warning":"Para poder editar la opción de Encriptar debe antes ejecutar la acción de Desencriptar en la pantalla anterior.",
+    "edit_label_encode_copy_warning":"No se puede copiar valores encriptados. Antes debe desencriptar los mismos."
   }
 }

@@ -32,7 +32,12 @@
     "label_add": "Add",
     "label_value": "Value",
     "label_encode": "Encode",
-    "label_encrypt": "Encrypt"
+    "label_encrypt": "Encrypt",
+    "label_edit": "Edit",
+    "label_previous": "Previous",
+    "label_next": "Next",
+    "label_copy": "Copy",
+    "label_message": "Message"
   },
   "home": {
     "label_create_accesslink": "Create access link",
@@ -46,7 +51,8 @@
     "error_required_password": "The password is required",
     "label_help_password": "Never share your password with anyone else.",
     "label_forgot_password": "Forgot Password?",
-    "label_create_account": "Create an Account!"
+    "label_create_account": "Create an Account!",
+    "message_session_out": "The session has expired, please re-login."
   },
   "createuser": {
     "title_form": "Create user",
@@ -102,6 +108,8 @@
     "edit_label_decode":"Decrypt",
     "edit_label_password":"Password",
     "edit_label_wddata_encoded":"Encrypted value",
-    "edit_label_encode":"Encrypt"
+    "edit_label_encode":"Encrypt",
+    "edit_label_encode_warning":"In order to edit the Encrypt option, you must first execute the Decrypt action on the previous screen.",
+    "edit_label_encode_copy_warning":"Cannot copy encrypted values. You must first decrypt them."
   }
 }

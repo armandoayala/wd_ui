@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from "@angular/core";
+import { Component, OnInit, AfterViewInit } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 import { Router, ActivatedRoute } from "@angular/router";
-
-import { NgbModal, ModalDismissReasons } from "@ng-bootstrap/ng-bootstrap";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import * as _ from "underscore";
+import { ClipboardService } from "ngx-clipboard";
 
 //Services
 import { UserService } from "../../../services/user.service";
@@ -49,6 +50,9 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
   private modalRef;
   private modalDecodeRef;
 
+  wdDataPage: number = 1;
+  wdDataItemsPerPage: number = 10;
+
   constructor(
     private translate: TranslateService,
     private _userService: UserService,
@@ -58,7 +62,8 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
     private _confirmationdialogService: ConfirmationdialogService,
     private modalService: NgbModal,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private _clipboardService: ClipboardService
   ) {
     this.title = "PROJECT";
     this.operationResult = new OperationResult(null, "", false);
@@ -113,6 +118,8 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
           this.title = this.wdProjectEntity.name;
           this.wdProjectNote = this.wdProjectEntity.note;
 
+          this.sortWDData();
+
           this.wdProjectEntityToUpdate.name = this.wdProjectEntity.name;
           this.wdProjectEntityToUpdate.client = this.wdProjectEntity.client;
           this.wdProjectEntityToUpdate.href = this.wdProjectEntity.href;
@@ -125,11 +132,9 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
         }
       },
       (httpError) => {
-        this.operationResult = this._utilService.processHttpError(httpError);
-        this._alertService.showAlert(
-          new Alert(this.operationResult.message, "danger")
-        );
-        this.router.navigate(["/wdproject/index"]);
+        this._utilService.processHttpError(httpError, (data) => {
+          this.router.navigate(["/wdproject/index"]);
+        });
       }
     );
   }
@@ -211,17 +216,14 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
           }
         },
         (httpError) => {
-          this.operationResult = this._utilService.processHttpError(httpError);
-          this._alertService.showAlert(
-            new Alert(this.operationResult.message, "danger")
-          );
+          this._utilService.processHttpError(httpError, null);
         }
       );
   }
 
   onNoteSave() {
     this.operationResult.inProgress = true;
-    console.log(this.wdProjectNote)
+    console.log(this.wdProjectNote);
     this._wdprojectService
       .update(this.model.id, { note: this.wdProjectNote })
       .subscribe(
@@ -242,15 +244,26 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
           }
         },
         (httpError) => {
-          this.operationResult = this._utilService.processHttpError(httpError);
-          this._alertService.showAlert(
-            new Alert(this.operationResult.message, "danger")
-          );
+          this._utilService.processHttpError(httpError, null);
         }
       );
   }
 
-  wdDataOpenCreatModal(content) {
+  wdDataOpenCreatModal(content, entityWDData, readOnlyMode) {
+    if (entityWDData) {
+      this.wdDataAddEntity = WDDataAdd.copyToInstance(entityWDData);
+      this.wdDataAddEntity.wdDataIsDecoded = this.wdDataIsDecoded;
+      this.wdDataAddEntity.wdDisabledEncrypt =
+        entityWDData.encode && !this.wdDataIsDecoded;
+    } else {
+      this.wdDataAddEntity.id = null;
+    }
+
+    this.wdDataAddEntity.wdReadOnly = false;
+    if (readOnlyMode == true) {
+      this.wdDataAddEntity.wdReadOnly = true;
+    }
+
     this.modalRef = this.modalService.open(content, {
       ariaLabelledBy: "modal-basic-title",
     });
@@ -267,7 +280,11 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
 
   wdDataCloseCreateModel(reason) {
     if (reason === "SAVE" && this.wdDataValidatCreate()) {
-      this.wdDataSaveEntityToCreate();
+      if (this.wdDataAddEntity.id) {
+        this.wdDataSaveEntityToUpdate();
+      } else {
+        this.wdDataSaveEntityToCreate();
+      }
     }
 
     if (reason === "CLOSE") {
@@ -281,7 +298,8 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
       this.wdDataAddEntity.value,
       this.wdDataAddEntity.url,
       this.wdDataAddEntity.isHref,
-      this.wdDataAddEntity.encode
+      this.wdDataAddEntity.encode,
+      this.wdDataAddEntity.description
     );
 
     this.operationResult.inProgress = true;
@@ -306,13 +324,52 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
         }
       },
       (httpError) => {
-        this.operationResult = this._utilService.processHttpError(httpError);
-        this.modalRef.dismiss("close");
-        this._alertService.showAlert(
-          new Alert(this.operationResult.message, "danger")
-        );
+        this._utilService.processHttpError(httpError, (data) => {
+          this.modalRef.dismiss("close");
+        });
       }
     );
+  }
+
+  wdDataSaveEntityToUpdate() {
+    var wdWDDataToSave = WDData.instanceToSave(
+      this.wdDataAddEntity.name,
+      this.wdDataAddEntity.value,
+      this.wdDataAddEntity.url,
+      this.wdDataAddEntity.isHref,
+      this.wdDataAddEntity.encode,
+      this.wdDataAddEntity.description
+    );
+
+    this.operationResult.inProgress = true;
+    this._wdprojectService
+      .updateWDData(this.model.id, this.wdDataAddEntity.id, wdWDDataToSave)
+      .subscribe(
+        (response) => {
+          this.operationResult = this._utilService.processGenericResponse(
+            response
+          );
+
+          if (!this.operationResult.error) {
+            this.modalRef.close(this.wdDataAddEntity);
+            this._alertService.showAlert(
+              new Alert("general.message_action_success", "success")
+            );
+
+            this.reloadWDData();
+          } else {
+            this.modalRef.dismiss("close");
+            this._alertService.showAlert(
+              new Alert(this.operationResult.message, "danger")
+            );
+          }
+        },
+        (httpError) => {
+          this._utilService.processHttpError(httpError, (data) => {
+            this.modalRef.dismiss("close");
+          });
+        }
+      );
   }
 
   wdDataValidatCreate() {
@@ -331,12 +388,16 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
   }
 
   wdDataCleanEntityToCreate() {
+    this.wdDataAddEntity.id = null;
     this.wdDataAddEntity.name = "";
     this.wdDataAddEntity.value = "";
     this.wdDataAddEntity.url = "";
     this.wdDataAddEntity.isHref = false;
     this.wdDataAddEntity.encode = false;
     this.wdDataAddEntity.isNotValid = false;
+    this.wdDataAddEntity.description = "";
+    this.wdDataAddEntity.wdDataIsDecoded = false;
+    this.wdDataAddEntity.wdReadOnly = false;
   }
 
   wdDataOpenDecodeModal(content) {
@@ -383,6 +444,8 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
             this.wdProjectEntity.wddata = this.operationResult.genericResponse.data;
             this.wdDataIsDecoded = true;
             this.wdDecodeModel.tempCode = this.wdDecodeModel.code;
+
+            this.sortWDData();
           } else {
             this.modalDecodeRef.dismiss("close");
             this._alertService.showAlert(
@@ -391,11 +454,9 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
           }
         },
         (httpError) => {
-          this.operationResult = this._utilService.processHttpError(httpError);
-          this.modalDecodeRef.dismiss("close");
-          this._alertService.showAlert(
-            new Alert(this.operationResult.message, "danger")
-          );
+          this._utilService.processHttpError(httpError, (data) => {
+            this.modalRef.dismiss("close");
+          });
         }
       );
   }
@@ -472,10 +533,7 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
       },
       (httpError) => {
         this.loadDataCurrentProject();
-        this.operationResult = this._utilService.processHttpError(httpError);
-        this._alertService.showAlert(
-          new Alert(this.operationResult.message, "danger")
-        );
+        this._utilService.processHttpError(httpError, null);
       }
     );
   }
@@ -515,11 +573,9 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
         }
       },
       (httpError) => {
-        this.operationResult = this._utilService.processHttpError(httpError);
-        this._alertService.showAlert(
-          new Alert(this.operationResult.message, "danger")
-        );
-        this.router.navigate(["/wdproject/index"]);
+        this._utilService.processHttpError(httpError, (data) => {
+          this.router.navigate(["/wdproject/index"]);
+        });
       }
     );
   }
@@ -545,6 +601,7 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
 
           if (!this.operationResult.error) {
             this.wdProjectEntity.wddata = this.operationResult.genericResponse.data;
+            this.sortWDData();
           } else {
             this._alertService.showAlert(
               new Alert(this.operationResult.message, "danger")
@@ -552,10 +609,7 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
           }
         },
         (httpError) => {
-          this.operationResult = this._utilService.processHttpError(httpError);
-          this._alertService.showAlert(
-            new Alert(this.operationResult.message, "danger")
-          );
+          this._utilService.processHttpError(httpError, null);
         }
       );
   }
@@ -570,6 +624,7 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
 
         if (!this.operationResult.error) {
           this.wdProjectEntity.wddata = this.operationResult.genericResponse.data.wddata;
+          this.sortWDData();
         } else {
           this._alertService.showAlert(
             new Alert(this.operationResult.message, "danger")
@@ -577,10 +632,7 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
         }
       },
       (httpError) => {
-        this.operationResult = this._utilService.processHttpError(httpError);
-        this._alertService.showAlert(
-          new Alert(this.operationResult.message, "danger")
-        );
+        this._utilService.processHttpError(httpError, null);
       }
     );
   }
@@ -594,5 +646,27 @@ export class WdprojectEditComponent implements OnInit, AfterViewInit {
     }
 
     return false;
+  }
+
+  sortWDData() {
+    if (!_.isEmpty(this.wdProjectEntity.wddata)) {
+      this.wdProjectEntity.wddata = _.sortBy(
+        this.wdProjectEntity.wddata,
+        "name"
+      );
+    }
+  }
+
+  wdDataCopy(wdDataItem) {
+    if (wdDataItem.encode && !this.wdDataIsDecoded) {
+      this.translate.get("wdproject.edit_label_encode_copy_warning").subscribe(
+        (data) => {
+          this._alertService.showAlert(new Alert(data, "warning"));
+        },
+        (error) => {}
+      );
+    } else {
+      this._clipboardService.copy(wdDataItem.value);
+    }
   }
 }

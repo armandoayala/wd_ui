@@ -53,7 +53,7 @@
 
 
                             <div class="float-right ml-3">
-                                <button (click)="wdDataOpenCreatModal(CreateWDDataModal)"
+                                <button (click)="wdDataOpenCreatModal(CreateWDDataModal,null)"
                                     [disabled]="executingAction('onWDDataAdd')" type="button" class="btn btn-primary">
                                     <i class="fas fa-plus-circle"></i>
                                     {{ 'general.label_add' | translate }}
@@ -93,17 +93,17 @@
                                     <thead class="thead-dark">
                                         <tr class="d-flex">
                                             <th class="col-3" scope="col">{{ 'general.label_name' | translate }}</th>
-                                            <th class="col-8" scope="col">{{ 'general.label_value' | translate }}</th>
-                                            <th class="col-1" scope="col">{{ 'general.label_actions' | translate }}</th>
+                                            <th class="col-7" scope="col">{{ 'general.label_value' | translate }}</th>
+                                            <th class="col-2" scope="col">{{ 'general.label_actions' | translate }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr class="d-flex"
-                                            *ngFor="let item of wdProjectEntity.wddata | searchgenericdata: filtersearch : 'name' ">
+                                            *ngFor="let item of wdProjectEntity.wddata | searchgenericdata: filtersearch : 'name' | paginate: { itemsPerPage: wdDataItemsPerPage, currentPage: wdDataPage } ">
                                             <td class="col-3">
-                                                <span>{{item.name}}</span>
+                                                <button type="button" (click)="wdDataOpenCreatModal(CreateWDDataModal,item,true)" class="btn btn-link">{{item.name}}</button>
                                             </td>
-                                            <td class="col-8">
+                                            <td class="col-7">
                                                 <div *ngIf="item.encode && !wdDataIsDecoded">
                                                     <p class="text-danger"><i class="fas fa-lock"></i>
                                                         {{ 'wdproject.edit_label_wddata_encoded' | translate }} </p>
@@ -118,22 +118,37 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="col-1">
+                                            <td class="col-2">
+                                                <span (click)="wdDataCopy(item)"
+                                                    class="item-action"><i class="fas fa-copy fa-lg"
+                                                        title="{{ 'general.label_copy' | translate }}"></i></span>
                                                 <span *ngIf="item.url && item.url!=null"
-                                                    (click)="openExternalLink(item.url)" class="item-action"><i
+                                                    (click)="openExternalLink(item.url)" class="ml-4 item-action"><i
                                                         class="fas fa-external-link-square-alt fa-lg"
                                                         title="{{ 'wdproject.index_label_href' | translate }}"></i></span>
-                                                <span *ngIf="!item.url || item.url==null"><i
+                                                <span *ngIf="!item.url || item.url==null" class="ml-4"><i
                                                         class="fas fa-unlink fa-lg text-secondary"
                                                         title="{{ 'wdproject.index_label_unlink' | translate }}"></i></span>
                                                 <span (click)="openConfirmationDialog(item._id,'DELETE_WDDATA')"
                                                     class="ml-4 item-action"><i class="fas fa-trash-alt fa-lg"
                                                         title="{{ 'general.label_remove' | translate }}"></i></span>
+                                                <span (click)="wdDataOpenCreatModal(CreateWDDataModal,item)"
+                                                    class="ml-4 item-action"><i class="fas fa-edit fa-lg"
+                                                        title="{{ 'general.label_edit' | translate }}"></i></span>
 
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
+                                
+                            </div>
+                            <div class="mt-3 d-flex justify-content-end" *ngIf="showSection('wddata_results')">
+                                <pagination-controls (pageChange)="wdDataPage = $event" 
+                                                     maxSize="10"  
+                                                     previousLabel="{{ 'general.label_previous' | translate }}"
+                                                     nextLabel="{{ 'general.label_next' | translate }}"
+                                                     responsive="true">                             
+                                </pagination-controls>
                             </div>
                         </div>
                     </div>
@@ -228,30 +243,42 @@
             <div class="form-group">
                 <label class="font-weight-bold" for="name">{{ 'general.label_name' | translate }}</label>
                 <input type="text" class="form-control" id="name" name="name" #name="ngModel"
-                    [(ngModel)]="wdDataAddEntity.name" required>
+                    [(ngModel)]="wdDataAddEntity.name" [readonly]="wdDataAddEntity.wdReadOnly" required>
             </div>
             <div class="form-group">
                 <label class="font-weight-bold" for="value">{{ 'general.label_value' | translate }}</label>
-                <input type="text" class="form-control" id="value" name="value" #value="ngModel"
-                    [(ngModel)]="wdDataAddEntity.value" required>
+                <input type="text" [disabled]="wdDataAddEntity.wdDisabledEncrypt"
+                    [readonly]="wdDataAddEntity.wdDisabledEncrypt || wdDataAddEntity.wdReadOnly" class="form-control" id="value" name="value"
+                    #value="ngModel" [(ngModel)]="wdDataAddEntity.value" required>
             </div>
             <div class="form-group">
                 <label for="url">{{ 'general.url' | translate }}</label>
                 <input type="text" class="form-control" id="url" name="url" #url="ngModel"
-                    [(ngModel)]="wdDataAddEntity.url">
+                    [(ngModel)]="wdDataAddEntity.url" [readonly]="wdDataAddEntity.wdReadOnly">
+            </div>
+            <div class="form-group">
+                <label for="description">{{ 'general.description' | translate }}</label>
+                <textarea type="text" class="form-control rounded-0" id="description" name="description"
+                    #description="ngModel" [(ngModel)]="wdDataAddEntity.description" [readonly]="wdDataAddEntity.wdReadOnly"
+                    rows="4" cols="50"
+                    maxlength=200></textarea>
             </div>
             <!--<div class="form-group">
-                <label>
-                    <input type="checkbox" value="1" (change)="onCheckboxIsHref($event)" />
-                    {{ 'wdproject.edit_label_is_href' | translate }}
-                </label>
-            </div>-->
-            <div class="form-group">
                 <label>
                     <input type="checkbox" value="2" (change)="onCheckboxEncode($event)" />
                     {{ 'general.label_encrypt' | translate }}
                 </label>
+            </div>-->
+            <div class="form-group form-check">
+                <input [disabled]="wdDataAddEntity.wdDisabledEncrypt || wdDataAddEntity.wdReadOnly" [checked]="wdDataAddEntity.encode==true"
+                    (change)="onCheckboxEncode($event)" type="checkbox" class="form-check-input" id="encodedCheck">
+                <label class="form-check-label" for="encodedCheck">{{ 'general.label_encrypt'
+                    | translate }}</label>
+                <small *ngIf="wdDataAddEntity.wdDisabledEncrypt && !wdDataAddEntity.wdReadOnly" id="encryptHelp" class="form-text text-muted">
+                    {{ 'wdproject.edit_label_encode_warning' | translate }}
+                </small>
             </div>
+
         </form>
     </div>
     <div class="modal-footer">

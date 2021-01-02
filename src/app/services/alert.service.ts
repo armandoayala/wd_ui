@@ -15,6 +15,7 @@ export class AlertService {
   showAlert(pAlert)
   {
    this.alert=pAlert;
+   window.scroll(0,0);
   }
 
   destroyAlert()

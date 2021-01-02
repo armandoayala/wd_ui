@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { routing, appRoutingProviders } from './app.routing';
 import {HttpClient,HttpClientModule} from '@angular/common/http';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import {NgxPaginationModule} from 'ngx-pagination';
+import { ClipboardModule } from 'ngx-clipboard';
 
 //Translation
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -72,6 +74,8 @@ const ROUTES = [
     HttpClientModule,
     NgbModule,
     SupportModule,
+    NgxPaginationModule,
+    ClipboardModule,
     TranslateModule.forRoot({
       loader:{
         provide: TranslateLoader,

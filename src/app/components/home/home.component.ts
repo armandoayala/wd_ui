@@ -69,8 +69,7 @@ export class HomeComponent implements OnInit, DoCheck {
       },
       httpError => {
 
-        this.operationResult = this._utilService.processHttpError(httpError);
-        this._alertService.showAlert(new Alert(this.operationResult.message, "danger"));
+        this._utilService.processHttpError(httpError, null);
       }
     );
 
@@ -120,8 +119,7 @@ export class HomeComponent implements OnInit, DoCheck {
 
             },
             httpError => {
-              operationResultFindAll = this._utilService.processHttpError(httpError);
-              this._alertService.showAlert(new Alert(this.operationResult.message, "danger"));
+              this._utilService.processHttpError(httpError, null);
             }
           );
         }
@@ -131,9 +129,9 @@ export class HomeComponent implements OnInit, DoCheck {
         }
       },
       httpError => {
-        this.operationResult = this._utilService.processHttpError(httpError);
-        this.modalRef.dismiss("close");
-        this._alertService.showAlert(new Alert(this.operationResult.message, "danger"));
+        this._utilService.processHttpError(httpError, (data) => {
+          this.modalRef.dismiss("close");
+        });
       }
     );
 
@@ -188,8 +186,7 @@ export class HomeComponent implements OnInit, DoCheck {
 
             },
             httpError => {
-              operationResultFindAll = this._utilService.processHttpError(httpError);
-              this._alertService.showAlert(new Alert(this.operationResult.message, "danger"));
+              this._utilService.processHttpError(httpError, null);
             }
           );
 
@@ -199,8 +196,7 @@ export class HomeComponent implements OnInit, DoCheck {
         }
       },
       httpError => {
-        this.operationResult = this._utilService.processHttpError(httpError);
-        this._alertService.showAlert(new Alert(this.operationResult.message, "danger"));
+        this._utilService.processHttpError(httpError, null);
       }
     );
 
