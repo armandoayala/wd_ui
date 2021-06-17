@@ -6,6 +6,7 @@ import { LoginComponent } from './components/login/login.component';
 import { RecoverypassComponent } from './components/recoverypass/recoverypass.component';
 import { ChangepassComponent } from './components/changepass/changepass.component';
 import { CreateuserComponent } from './components/createuser/createuser.component';
+import { ConfirmuserComponent } from './components/confirmuser/confirmuser.component';
 
 import {AuthGuard} from './services/auth.guard';
 import {LoginGuard} from './services/login.guard';
@@ -21,6 +22,7 @@ const appRoutes: Routes = [
   {path:'recoverypass',component: RecoverypassComponent,canActivate:[LoginGuard]},
   {path:'changepass',component: ChangepassComponent,canActivate:[LoginGuard]},
   {path:'createuser',component: CreateuserComponent,canActivate:[LoginGuard]},
+  {path:'confirmuser/:id/:code',component: ConfirmuserComponent,canActivate:[LoginGuard]},
   {path:'**',component: HomeComponent, canActivate:[AuthGuard]}
 ];
 export const appRoutingProviders:any[]=[];

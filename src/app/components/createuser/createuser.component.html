@@ -61,8 +61,12 @@
           <button type="submit" class="btn btn-primary btn-lg btn-block" [disabled]="!createuserForm.form.valid">{{ 'createuser.label_form_action' | translate }}</button>
         </form>
 
-        <div class="card-text text-center" *ngIf="operationResult.error!==null && !operationResult.error">
+        <div class="card-text text-center" *ngIf="operationResult.error!==null && !operationResult.error && operationResult.genericResponse.data.email_confirm==0">
           <p>{{ 'createuser.message_success_create' | translate }} <br> {{ 'createuser.message_success_dologin' | translate }} <strong>{{createUser.email}}</strong></p>
+        </div>
+
+        <div class="card-text text-center" *ngIf="operationResult.error!==null && !operationResult.error && operationResult.genericResponse.data.email_confirm==1">
+          <p>{{ 'createuser.message_success_create' | translate }} <br> {{ 'createuser.message_success_confirm_email' | translate }} <strong>{{createUser.email}}</strong></p>
         </div>
 
         <div class="text-center">

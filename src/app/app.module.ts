@@ -16,6 +16,9 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
 import { WDPROJECT_COMPONENTS,WdProjectRoutingModule } from './components/wdproject';
+import { RecoverypassComponent } from './components/recoverypass/recoverypass.component';
+import { ChangepassComponent } from './components/changepass/changepass.component';
+import { CreateuserComponent } from './components/createuser/createuser.component';
 
 //Services
 import { UserService } from './services/user.service';
@@ -26,9 +29,6 @@ import { UtilService } from './services/util.service';
 //Guards
 import {AuthGuard} from './services/auth.guard';
 import {LoginGuard} from './services/login.guard';
-import { RecoverypassComponent } from './components/recoverypass/recoverypass.component';
-import { ChangepassComponent } from './components/changepass/changepass.component';
-import { CreateuserComponent } from './components/createuser/createuser.component';
 
 //Pipes
 import {SearchAccessLinkPipe} from './pipes/searchaccesslink.pipe';
@@ -42,6 +42,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SupportModule } from './support/support.module';
 import { PageheaderComponent } from './components/pageheader/pageheader.component';
 import { SearchgenericdataPipe } from './pipes/searchgenericdata.pipe';
+import { ConfirmuserComponent } from './components/confirmuser/confirmuser.component';
 
 const COMPONENTS = [
   ...WDPROJECT_COMPONENTS
@@ -64,7 +65,8 @@ const ROUTES = [
     ...COMPONENTS,
     ShortDateTimePipe,
     ShortDatePipe,
-    SearchgenericdataPipe
+    SearchgenericdataPipe,
+    ConfirmuserComponent
   ],
   imports: [
     CKEditorModule,

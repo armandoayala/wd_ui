@@ -10,5 +10,6 @@ export var CONSTANT= {
       lang:'en'
     }
   ],
-  page_limit:10
+  page_limit:10,
+  jwt_token_prefix: "Bearer "
 }

@@ -68,6 +68,7 @@
     "error_notmatch_password": "El password no coincide con el ingresado antes",
     "message_success_create": "Usuario creado con éxito.",
     "message_success_dologin": "Puede proceder a realizar el login con",
+    "message_success_confirm_email": "Para finalizar el registro, valide su correo y confirme su dirección de email",
     "placeholder_name": "Ingrese nombre",
     "placeholder_surname": "Ingrese apellido",
     "placeholder_confirm_password": "Password confirmación"
@@ -111,5 +112,11 @@
     "edit_label_encode":"Encriptar",
     "edit_label_encode_warning":"Para poder editar la opción de Encriptar debe antes ejecutar la acción de Desencriptar en la pantalla anterior.",
     "edit_label_encode_copy_warning":"No se puede copiar valores encriptados. Antes debe desencriptar los mismos."
+  },
+  "confirmuser": {
+    "title_form": "Confirmación usuario",
+    "message_success": "Usuario confirmado con éxito.",
+    "message_success_dologin": "Puede proceder a realizar el login con sus credenciales.",
+    "message_error": "Ocurrió un error en la confirmación del usuario. Por favor, vuelva a intentarlo."
   }
 }

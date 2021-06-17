@@ -1,0 +1,30 @@
+<div class="col-md-6 col-lg-6 offset-md-3">
+    <div class="card border-primary">
+
+        <div class="card-body">
+
+            <h5 class="card-title text-center">{{ 'confirmuser.title_form' | translate }}</h5>
+
+            <p class="card-text text-info" *ngIf="operationResult.error==null && operationResult.inProgress">{{
+                'general.message_wait_request' | translate }}</p>
+
+            <div class="card-text text-center" *ngIf="operationResult.error!==null && !operationResult.error">
+                <p>{{ 'createuser.message_success_create' | translate }} <br> {{ 'createuser.message_success_dologin' |
+                    translate }}</p>
+            </div>
+
+            <div class="card-text text-center" *ngIf="operationResult.error!==null && operationResult.error">
+                <p>{{ 'createuser.message_success_create' | translate }} <br> {{ 'createuser.message_error' | translate
+                    }}</p>
+            </div>
+
+            <div class="text-center">
+                <hr>
+                <button type="button" class="btn btn-link small" [routerLink]="['/login']">{{ 'login.title_form' |
+                    translate }}</button>
+            </div>
+
+        </div>
+
+    </div>
+</div>

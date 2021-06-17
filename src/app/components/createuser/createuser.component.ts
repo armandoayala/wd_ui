@@ -45,6 +45,7 @@ export class CreateuserComponent implements OnInit {
         this.genericResponse=response;
         this.operationResult.error=(this.genericResponse.code!=="0"?true:false);
         this.operationResult.message=this.genericResponse.message;
+        this.operationResult.genericResponse=this.genericResponse;
         this.operationResult.inProgress=false;
 
      },

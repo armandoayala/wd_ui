@@ -8,8 +8,8 @@ export var GLOBAL= {
   keyIdentity:"wdIdentity"
 }
 
-/*LOCAL SERVER
-export var GLOBAL= {
+//LOCAL SERVER
+/*export var GLOBAL= {
   url: 'http://localhost:4300/api/',
   keyIdentity:"wdIdentity"
 }*/

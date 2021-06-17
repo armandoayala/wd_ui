@@ -8,6 +8,7 @@ import {GenericResponse} from '../models/genericresponse';
 import {User} from '../models/user';
 import {PasswordChange} from '../models/passwordchange';
 import {CreateUser} from '../models/createuser';
+import {CONSTANT} from './constant';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -37,7 +38,7 @@ export class UserService {
     var user=this.getIdentity();
     if(user!=null)
     {
-      httpOptions.headers = httpOptions.headers.set('Authorization', user.token);
+      httpOptions.headers = httpOptions.headers.set('Authorization', CONSTANT.jwt_token_prefix+user.token);
     }
 
     return httpOptions;
@@ -56,6 +57,11 @@ export class UserService {
   changePassword(passwordChange: PasswordChange) : Observable<GenericResponse>
   {
      return this._http.post<GenericResponse>(this.url+'user/change-password',{email:passwordChange.email,password:passwordChange.password,code:passwordChange.code},this.prepareHttpOptions());
+  }
+
+  confirmUser(id: string,code: string) : Observable<GenericResponse>
+  {
+     return this._http.put<GenericResponse>(this.url+'user/confirm-user'+"/"+id+"/"+code,{},this.prepareHttpOptions());
   }
 
   createUser(createUser: CreateUser) : Observable<GenericResponse>
